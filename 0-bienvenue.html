@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 Secondes Chrono - Bienvenue</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #FFFFFF;
+            color: #172E42;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: #172E42;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 8px rgba(23, 46, 66, 0.15);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #D27A2D;
+            letter-spacing: 0.5px;
+        }
+
+        .close-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #FFFFFF;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            border-color: #D27A2D;
+            color: #D27A2D;
+            transform: rotate(90deg);
+        }
+
+        /* Container */
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            text-align: center;
+            padding: 3rem 0;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mascot-container {
+            margin-bottom: 2rem;
+            animation: bounceIn 0.8s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .mascot-image {
+            width: 500px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            filter: drop-shadow(0 8px 20px rgba(210, 122, 45, 0.3));
+        }
+
+        .welcome-message {
+            margin-top: 2rem;
+            padding: 2rem;
+            color: #172E42;
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #D27A2D;
+            margin-bottom: 1rem;
+        }
+
+        .typing-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            min-height: 60px;
+            font-weight: 600;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2rem;
+            background: #D27A2D;
+            margin-left: 4px;
+            animation: blink 1s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        /* Profile Section */
+        .profile-section {
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .profile-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #172E42;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            color: #2A262A;
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            opacity: 0.8;
+        }
+
+        .question-block {
+            margin-bottom: 3rem;
+        }
+
+        .question-label {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #172E42;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            display: block;
+        }
+
+        .question-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .option-card {
+            background: #FFFFFF;
+            border: 3px solid #172E42;
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            font-weight: 700;
+            color: #172E42;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .option-card:hover {
+            border-color: #D27A2D;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(210, 122, 45, 0.3);
+            background: #FFF9F5;
+        }
+
+        .option-card.selected {
+            border-color: #D27A2D;
+            background: linear-gradient(135deg, #D27A2D 0%, #E89347 100%);
+            color: #FFFFFF;
+            box-shadow: 0 6px 20px rgba(210, 122, 45, 0.4);
+            transform: scale(1.05);
+        }
+
+        .option-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 32px;
+            height: 32px;
+            background: #10B981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            font-size: 1.2rem;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Custom Select Dropdown */
+        .select-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .custom-select {
+            width: 100%;
+            padding: 1.25rem 3rem 1.25rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Nunito', sans-serif;
+            color: #172E42;
+            background: #FFFFFF;
+            border: 3px solid #172E42;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .custom-select:hover {
+            border-color: #D27A2D;
+            background: #FFF9F5;
+        }
+
+        .custom-select:focus {
+            outline: none;
+            border-color: #D27A2D;
+            box-shadow: 0 0 0 4px rgba(210, 122, 45, 0.2);
+        }
+
+        .custom-select option {
+            padding: 1rem;
+            font-weight: 600;
+        }
+
+        .select-icon {
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 1.5rem;
+            color: #D27A2D;
+        }
+
+        .select-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #6B7280;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Hidden state for second select */
+        .hidden {
+            display: none;
+        }
+
+        .slide-in {
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(23, 46, 66, 0.1);
+        }
+
+        .btn {
+            padding: 1.25rem 2.75rem;
+            border-radius: 16px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Nunito', sans-serif;
+            min-width: 180px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #D27A2D 0%, #E89347 100%);
+            color: #FFFFFF;
+            box-shadow: 0 4px 15px rgba(210, 122, 45, 0.4);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(210, 122, 45, 0.6);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 3px solid #172E42;
+            color: #172E42;
+        }
+
+        .btn-secondary:hover {
+            background: #172E42;
+            color: #FFFFFF;
+        }
+
+        /* Progress Indicator */
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(23, 46, 66, 0.2);
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: #D27A2D;
+            width: 40px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(210, 122, 45, 0.4);
+        }
+
+        .dot.completed {
+            background: #10B981;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 1.6rem;
+            }
+
+            .typing-text {
+                font-size: 1rem;
+            }
+
+            .mascot-image {
+                width: 200px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">5 SECONDES CHRONO</div>
+            <button class="close-btn" onclick="confirmQuit()">✕</button>
+        </div>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
+
+        <!-- Welcome Section -->
+        <div class="welcome-section" id="welcomeSection">
+            <div class="mascot-container">
+                <img src="mascotte/no_bg/bienvenue.png" 
+                     alt="Mascotte" 
+                     class="mascot-image" 
+                     id="mascotImage">
+            </div>
+
+            <div class="welcome-message">
+                <h1 class="welcome-title">Inscription validée !</h1>
+                <p class="typing-text" id="typingText"><span class="cursor"></span></p>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="profile-section" id="profileSection">
+            
+            <div class="progress-dots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+
+            <h2 class="section-title">Quelques informations pour personnaliser ton expérience</h2>
+            <p class="section-subtitle">Ces informations nous permettent de mieux adapter le contenu à ton profil</p>
+
+            <!-- Question 1: Tranche d'âge -->
+            <div class="question-block" id="question1">
+                <label class="question-label">Quelle est ta tranche d'âge ?</label>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectOption('age', '18-25', this)">
+                        18-25 ans
+                    </div>
+                    <div class="option-card" onclick="selectOption('age', '26-35', this)">
+                        26-35 ans
+                    </div>
+                    <div class="option-card" onclick="selectOption('age', '36-45', this)">
+                        36-45 ans
+                    </div>
+                    <div class="option-card" onclick="selectOption('age', '46-55', this)">
+                        46-55 ans
+                    </div>
+                    <div class="option-card" onclick="selectOption('age', '56+', this)">
+                        56 ans et plus
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2: Statut Professionnel -->
+            <div class="question-block" id="question2" style="display: none;">
+                <label class="question-label">Quel est ton statut professionnel ?</label>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectOption('statut', 'Salarié', this)">
+                        Salarié
+                    </div>
+                    <div class="option-card" onclick="selectOption('statut', 'Indépendant', this)">
+                        Indépendant
+                    </div>
+                    <div class="option-card" onclick="selectOption('statut', 'Mandataire', this)">
+                        Mandataire
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3: Profil Métier avec Select Cascadé -->
+            <div class="question-block" id="question3" style="display: none;">
+                <label class="question-label">Quel est ton profil métier ?</label>
+                
+                <!-- Secteur -->
+                <div class="select-container">
+                    <label class="select-label">1. Choisis ton secteur</label>
+                    <select class="custom-select" id="secteurSelect" onchange="handleSecteurChange()">
+                        <option value="">-- Sélectionne un secteur --</option>
+                        <option value="immo_transaction">Immobilier — Transaction</option>
+                        <option value="immo_gestion">Immobilier — Gestion locative</option>
+                        <option value="immo_expertise">Immobilier — Expertise et conseil</option>
+                        <option value="finance">Finance et patrimoine</option>
+                        <option value="comptabilite">Comptabilité et gestion</option>
+                        <option value="commerce">Commerce et entrepreneuriat</option>
+                        <option value="collectivites">Collectivités et aménagement</option>
+                    </select>
+                    <span class="select-icon">▼</span>
+                </div>
+
+                <!-- Métier spécifique -->
+                <div class="select-container hidden" id="metierContainer">
+                    <label class="select-label">2. Précise ton métier</label>
+                    <select class="custom-select" id="metierSelect" onchange="handleMetierChange()">
+                        <option value="">-- Sélectionne un métier --</option>
+                    </select>
+                    <span class="select-icon">▼</span>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="actions">
+                <button class="btn btn-secondary" id="backBtn" onclick="previousQuestion()" style="display: none;">
+                    ← Retour
+                </button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>
+                    Continuer →
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Données des métiers par secteur
+        const metiersBySecteur = {
+            immo_transaction: [
+                { value: 'agent_transaction_pro', label: 'Agent immobilier transaction pro/commercial' },
+                { value: 'agent_transaction_hab', label: 'Agent immobilier transaction habitation' },
+                { value: 'assistant_commercial', label: 'Assistant(e) commercial(e) agence immobilière' }
+            ],
+            immo_gestion: [
+                { value: 'gestionnaire_locatif_pro', label: 'Gestionnaire locatif professionnel/commercial' },
+                { value: 'gestionnaire_locatif_hab', label: 'Gestionnaire locatif habitation' }
+            ],
+            immo_expertise: [
+                { value: 'expert_immobilier', label: 'Expert immobilier' },
+                { value: 'consultant_immobilier', label: 'Consultant en immobilier d\'entreprise' }
+            ],
+            finance: [
+                { value: 'cgp', label: 'Conseiller en gestion de patrimoine (CGP)' },
+                { value: 'conseiller_bancaire', label: 'Conseiller bancaire professionnels' }
+            ],
+            comptabilite: [
+                { value: 'expert_comptable', label: 'Expert-comptable' },
+                { value: 'collaborateur_cabinet', label: 'Collaborateur cabinet comptable' },
+                { value: 'controleur_gestion', label: 'Contrôleur de gestion' }
+            ],
+            commerce: [
+                { value: 'commercant', label: 'Commerçant indépendant' },
+                { value: 'franchise', label: 'Franchisé' },
+                { value: 'createur', label: 'Créateur/repreneur d\'entreprise' },
+                { value: 'artisan', label: 'Artisan avec local commercial' }
+            ],
+            collectivites: [
+                { value: 'charge_dev_eco', label: 'Chargé de développement économique territorial' },
+                { value: 'gestionnaire_foncier', label: 'Gestionnaire foncier collectivité' }
+            ]
+        };
+
+        // User profile data
+        let userProfile = {
+            age: null,
+            statut: null,
+            secteur: null,
+            metier: null
+        };
+
+        let currentQuestion = 0;
+
+        // Typing animation
+        const messages = [
+            "Plus que quelques questions et le quiz commence !",
+        ];
+
+        function typeMessage(text, callback) {
+            const typingElement = document.getElementById('typingText');
+            let index = 0;
+            typingElement.innerHTML = '<span class="cursor"></span>';
+            
+            const interval = setInterval(() => {
+                if (index < text.length) {
+                    typingElement.innerHTML = text.substring(0, index + 1) + '<span class="cursor"></span>';
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    if (callback) {
+                        setTimeout(callback, 1500);
+                    }
+                }
+            }, 50);
+        }
+
+        // Start typing animation
+        setTimeout(() => {
+            typeMessage(messages[0], () => {
+                // Show profile section after typing
+                document.getElementById('welcomeSection').style.display = 'none';
+                document.getElementById('profileSection').classList.add('active');
+            });
+        }, 1000);
+
+        // Select option (for age and statut)
+        function selectOption(category, value, element) {
+            // Deselect all in this category
+            const parent = element.closest('.question-block');
+            parent.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Select this one
+            element.classList.add('selected');
+            userProfile[category] = value;
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        // Handle secteur change
+        function handleSecteurChange() {
+            const secteurSelect = document.getElementById('secteurSelect');
+            const metierSelect = document.getElementById('metierSelect');
+            const metierContainer = document.getElementById('metierContainer');
+            const selectedSecteur = secteurSelect.value;
+            
+            if (selectedSecteur) {
+                userProfile.secteur = selectedSecteur;
+                
+                // Clear metier selection
+                metierSelect.innerHTML = '<option value="">-- Sélectionne un métier --</option>';
+                userProfile.metier = null;
+                
+                // Populate metier options
+                const metiers = metiersBySecteur[selectedSecteur];
+                metiers.forEach(metier => {
+                    const option = document.createElement('option');
+                    option.value = metier.value;
+                    option.textContent = metier.label;
+                    metierSelect.appendChild(option);
+                });
+                
+                // Show metier container with animation
+                metierContainer.classList.remove('hidden');
+                metierContainer.classList.add('slide-in');
+                
+                // Disable next button until metier is selected
+                document.getElementById('nextBtn').disabled = true;
+            } else {
+                metierContainer.classList.add('hidden');
+                document.getElementById('nextBtn').disabled = true;
+            }
+        }
+
+        // Handle metier change
+        function handleMetierChange() {
+            const metierSelect = document.getElementById('metierSelect');
+            const selectedMetier = metierSelect.value;
+            
+            if (selectedMetier) {
+                userProfile.metier = selectedMetier;
+                document.getElementById('nextBtn').disabled = false;
+            } else {
+                userProfile.metier = null;
+                document.getElementById('nextBtn').disabled = true;
+            }
+        }
+
+        // Next question
+        function nextQuestion() {
+            const questions = ['question1', 'question2', 'question3'];
+            const dots = document.querySelectorAll('.dot');
+            
+            if (currentQuestion < questions.length - 1) {
+                // Mark current dot as completed
+                dots[currentQuestion].classList.add('completed');
+                dots[currentQuestion].classList.remove('active');
+                
+                // Hide current question
+                document.getElementById(questions[currentQuestion]).style.display = 'none';
+                
+                // Show next question
+                currentQuestion++;
+                document.getElementById(questions[currentQuestion]).style.display = 'block';
+                
+                // Update progress dots
+                dots[currentQuestion].classList.add('active');
+                
+                // Show back button
+                document.getElementById('backBtn').style.display = 'block';
+                
+                // Disable next button until selection
+                document.getElementById('nextBtn').disabled = true;
+                
+                // Check if already selected
+                if (currentQuestion === 0 && userProfile.age) {
+                    document.getElementById('nextBtn').disabled = false;
+                } else if (currentQuestion === 1 && userProfile.statut) {
+                    document.getElementById('nextBtn').disabled = false;
+                } else if (currentQuestion === 2 && userProfile.metier) {
+                    document.getElementById('nextBtn').disabled = false;
+                }
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // Last question - go to next page
+                saveProfileAndContinue();
+            }
+        }
+
+        // Previous question
+        function previousQuestion() {
+            const questions = ['question1', 'question2', 'question3'];
+            const dots = document.querySelectorAll('.dot');
+            
+            if (currentQuestion > 0) {
+                // Hide current question
+                document.getElementById(questions[currentQuestion]).style.display = 'none';
+                
+                // Update dots
+                dots[currentQuestion].classList.remove('active');
+                
+                // Show previous question
+                currentQuestion--;
+                document.getElementById(questions[currentQuestion]).style.display = 'block';
+                
+                // Update progress dots
+                dots[currentQuestion].classList.remove('completed');
+                dots[currentQuestion].classList.add('active');
+                
+                // Hide back button if first question
+                if (currentQuestion === 0) {
+                    document.getElementById('backBtn').style.display = 'none';
+                }
+                
+                // Enable next button if already selected
+                if (currentQuestion === 0 && userProfile.age) {
+                    document.getElementById('nextBtn').disabled = false;
+                } else if (currentQuestion === 1 && userProfile.statut) {
+                    document.getElementById('nextBtn').disabled = false;
+                } else if (currentQuestion === 2 && userProfile.metier) {
+                    document.getElementById('nextBtn').disabled = false;
+                } else {
+                    document.getElementById('nextBtn').disabled = true;
+                }
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Save profile and continue
+        function saveProfileAndContinue() {
+            console.log('User Profile:', userProfile);
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            window.location.href = '01-intro.html';
+        }
+
+        function confirmQuit() {
+            if (confirm('Êtes-vous sûr de vouloir quitter ?')) {
+                window.location.href = '/';
+            }
+        }
+    </script>
+
+</body>
+</html>
