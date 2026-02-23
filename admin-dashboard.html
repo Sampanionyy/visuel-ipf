@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 Secondes Chrono – Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --orange:       #D27A2D;
+            --orange-light: #F59E0B;
+            --orange-pale:  rgba(210,122,45,0.12);
+            --navy:         #1e3a5f;
+            --navy-dark:    #172E42;
+            --navy-mid:     #254b73;
+            --white:        #FFFFFF;
+            --surface:      #F8F5F1;
+            --border:       rgba(210,122,45,0.18);
+            --text:         #172E42;
+            --text-soft:    #5a7a99;
+            --green:        #10B981;
+            --red:          #EF4444;
+            --sidebar-w:    260px;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--surface);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── SIDEBAR ─────────────────────────────── */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--navy);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 50;
+            transition: width .3s ease;
+        }
+
+        .sidebar.collapsed { width: 72px; }
+
+        /* logo */
+        .sb-logo {
+            height: 68px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .logo-badge {
+            width: 38px; height: 38px; flex-shrink: 0;
+            background: linear-gradient(135deg, var(--orange), var(--orange-light));
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 18px; color: #fff;
+        }
+        .logo-text { font-size: 13px; font-weight: 800; color: #fff; line-height: 1.3; }
+        .logo-sub  { font-size: 10px; font-weight: 600; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* toggle */
+        .sb-toggle {
+            display: flex; align-items: center; justify-content: center;
+            height: 44px;
+            border: none; background: transparent;
+            color: rgba(255,255,255,.5);
+            cursor: pointer; transition: color .2s;
+            margin: 8px auto 0;
+            width: 44px; border-radius: 10px;
+        }
+        .sb-toggle:hover { color: #fff; background: rgba(255,255,255,.06); }
+        .sb-toggle svg { transition: transform .3s; }
+        .sidebar.collapsed .sb-toggle svg { transform: rotate(180deg); }
+
+        /* nav */
+        .sb-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
+        .sb-section-label {
+            font-size: 10px; font-weight: 800; letter-spacing: 2px;
+            color: rgba(255,255,255,.28); text-transform: uppercase;
+            padding: 16px 12px 6px;
+            white-space: nowrap; overflow: hidden;
+            transition: opacity .2s;
+        }
+        .sidebar.collapsed .sb-section-label { opacity: 0; }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: rgba(255,255,255,.6);
+            font-weight: 700; font-size: 14px;
+            transition: all .2s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            margin-bottom: 2px;
+            border: none; background: transparent; width: 100%;
+            text-align: left;
+        }
+        .nav-item .ni-icon {
+            width: 20px; height: 20px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .nav-item .ni-label { transition: opacity .2s; }
+        .sidebar.collapsed .nav-item .ni-label { opacity: 0; width: 0; overflow: hidden; }
+
+        .nav-item:hover   { background: rgba(255,255,255,.07); color: #fff; }
+        .nav-item.active  {
+            background: linear-gradient(135deg, rgba(210,122,45,.25), rgba(245,158,11,.15));
+            color: #fff;
+        }
+        .nav-item.active .ni-icon svg { color: var(--orange-light); }
+        .nav-item.active::before {
+            content: '';
+            position: absolute; left: 0; top: 20%; height: 60%; width: 3px;
+        }
+
+        /* badge */
+        .nav-badge {
+            margin-left: auto; flex-shrink: 0;
+            background: var(--orange);
+            color: #fff; font-size: 11px; font-weight: 800;
+            padding: 2px 7px; border-radius: 20px;
+            transition: opacity .2s;
+        }
+        .sidebar.collapsed .nav-badge { opacity: 0; }
+
+        /* user */
+        .sb-user {
+            padding: 14px 12px;
+            border-top: 1px solid rgba(255,255,255,.08);
+            display: flex; align-items: center; gap: 10px;
+            overflow: hidden; white-space: nowrap;
+        }
+        .sb-avatar {
+            width: 38px; height: 38px; flex-shrink: 0; border-radius: 50%;
+            background: linear-gradient(135deg, var(--orange), var(--orange-light));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 15px; color: #fff;
+        }
+        .sb-user-info { flex: 1; min-width: 0; transition: opacity .2s; }
+        .sidebar.collapsed .sb-user-info { opacity: 0; }
+        .sb-user-name  { font-size: 13px; font-weight: 800; color: #fff; overflow: hidden; text-overflow: ellipsis; }
+        .sb-user-role  { font-size: 11px; color: rgba(255,255,255,.45); font-weight: 600; }
+
+        /* ── MAIN ────────────────────────────────── */
+        .main {
+            flex: 1;
+            margin-left: var(--sidebar-w);
+            transition: margin-left .3s ease;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+        .sidebar.collapsed ~ .main { margin-left: 72px; }
+
+        /* topbar */
+        .topbar {
+            height: 68px;
+            background: rgba(255,255,255,.97);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 32px;
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 40;
+        }
+        .topbar-title { font-size: 20px; font-weight: 900; color: var(--navy-dark); }
+        .topbar-actions { display: flex; align-items: center; gap: 12px; }
+        .topbar-btn {
+            height: 38px; padding: 0 18px;
+            border-radius: 10px; border: none; cursor: pointer;
+            font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px;
+            display: flex; align-items: center; gap: 8px;
+            transition: all .2s;
+        }
+        .topbar-btn-secondary {
+            background: var(--orange-pale); color: var(--orange);
+        }
+        .topbar-btn-secondary:hover { background: rgba(210,122,45,.22); }
+        .topbar-btn-primary {
+            background: linear-gradient(135deg, var(--orange), var(--orange-light));
+            color: #fff;
+        }
+
+        /* ── PAGES ───────────────────────────────── */
+        .page { display: none; flex: 1; padding: 32px; animation: fadeIn .25s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ── DASHBOARD PAGE ──────────────────────── */
+        .stats-row {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+            margin-bottom: 28px;
+        }
+        .stat-card {
+            background: #fff; border-radius: 10px; padding: 24px;
+            border: 1.5px solid lightgray;
+            position: relative; overflow: hidden;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        }
+        .stat-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 16px; font-size: 20px;
+        }
+        .stat-icon.orange { background: rgba(210,122,45,.12); color: var(--orange); }
+        .stat-icon.green  { background: rgba(16,185,129,.12); color: var(--green); }
+        .stat-icon.red    { background: rgba(239,68,68,.12);  color: var(--red); }
+        .stat-icon.navy   { background: rgba(30,58,95,.1);    color: var(--navy); }
+        .stat-value { font-size: 32px; font-weight: 900; color: var(--navy-dark); line-height: 1; }
+        .stat-label { font-size: 12px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
+        .stat-delta { font-size: 12px; font-weight: 700; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+        .stat-delta.up   { color: var(--green); }
+        .stat-delta.down { color: var(--red); }
+
+        /* charts row */
+        .charts-row {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 20px;
+            margin-bottom: 28px;
+        }
+        .card {
+            background: #fff; border-radius: 10px; padding: 24px;
+            border: 1.5px solid lightgray;
+        }
+        .card-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .card-title { font-size: 16px; font-weight: 800; color: var(--navy-dark); }
+        .card-badge {
+            font-size: 11px; font-weight: 800; padding: 4px 10px;
+            background: var(--orange-pale); color: var(--orange);
+            border-radius: 20px;
+        }
+
+        /* bar chart fake */
+        .bar-chart { display: flex; align-items: flex-end; gap: 10px; height: 160px; }
+        .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .bar {
+            width: 100%; border-radius: 8px 8px 0 0;
+            background: linear-gradient(180deg, var(--orange), var(--orange-light));
+            opacity: .85; transition: opacity .2s;
+            position: relative;
+        }
+        .bar:hover { opacity: 1; }
+        .bar.alt { background: linear-gradient(180deg, var(--navy), var(--navy-mid)); }
+        .bar-label { font-size: 11px; font-weight: 700; color: var(--text-soft); }
+
+        /* donut fake */
+        .donut-wrap { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .donut-svg-wrap { position: relative; width: 140px; height: 140px; }
+        .donut-center {
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+        .donut-pct { font-size: 28px; font-weight: 900; color: var(--navy-dark); }
+        .donut-sub { font-size: 11px; font-weight: 700; color: var(--text-soft); }
+        .donut-legend { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--text); }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .legend-val { margin-left: auto; font-weight: 800; color: var(--navy-dark); }
+
+        /* recent quiz table */
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        thead th {
+            font-size: 11px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--text-soft);
+            padding: 10px 16px; text-align: left;
+            border-bottom: 2px solid var(--border);
+        }
+        tbody tr { transition: background .15s; }
+        tbody tr:hover { background: var(--orange-pale); }
+        tbody td {
+            padding: 13px 16px; font-size: 14px; font-weight: 600;
+            color: var(--text); border-bottom: 1px solid rgba(210,122,45,.08);
+        }
+        .tag {
+            display: inline-flex; align-items: center;
+            padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 800;
+        }
+        .tag-orange { background: rgba(210,122,45,.12); color: var(--orange); }
+        .tag-green  { background: rgba(16,185,129,.12);  color: var(--green); }
+        .tag-navy   { background: rgba(30,58,95,.1);     color: var(--navy); }
+
+        /* ── QUESTIONS PAGE ──────────────────────── */
+        .q-toolbar {
+            display: flex; align-items: center; gap: 14px;
+            margin-bottom: 24px; flex-wrap: wrap;
+        }
+        .search-box {
+            flex: 1; min-width: 220px; max-width: 380px;
+            height: 42px;
+            border: 2px solid var(--border); border-radius: 12px;
+            padding: 0 16px 0 42px;
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 600;
+            background: #fff; color: var(--text); outline: none;
+            transition: border-color .2s;
+            position: relative;
+        }
+        .search-box:focus { border-color: var(--orange); }
+        .search-wrap { position: relative; flex: 1; min-width: 220px; max-width: 380px; }
+        .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-soft); pointer-events: none; }
+        .filter-select {
+            height: 42px; padding: 0 14px;
+            border: 2px solid var(--border); border-radius: 12px;
+            font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+            background: #fff; color: var(--text); cursor: pointer; outline: none;
+            transition: border-color .2s;
+        }
+        .filter-select:focus { border-color: var(--orange); }
+
+        /* questions list */
+        .q-list { display: flex; flex-direction: column; gap: 14px; }
+        .q-card {
+            background: #fff; border-radius: 16px; padding: 20px 24px;
+            border: 1.5px solid var(--border);
+            display: flex; align-items: flex-start; gap: 18px;
+            transition: transform .2s, box-shadow .2s, border-color .2s;
+            cursor: pointer;
+        }
+        .q-num {
+            width: 38px; height: 38px; flex-shrink: 0;
+            background: var(--orange-pale); color: var(--orange);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 15px;
+        }
+        .q-body { flex: 1; }
+        .q-text { font-size: 15px; font-weight: 700; color: var(--navy-dark); margin-bottom: 8px; line-height: 1.4; }
+        .q-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .q-difficulty { font-size: 12px; font-weight: 800; }
+        .q-difficulty.easy   { color: var(--green); }
+        .q-difficulty.medium { color: var(--orange); }
+        .q-difficulty.hard   { color: var(--red); }
+        .q-stats { font-size: 12px; font-weight: 700; color: var(--text-soft); display: flex; align-items: center; gap: 4px; }
+        .q-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .icon-btn {
+            width: 34px; height: 34px; border-radius: 9px;
+            border: none; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            transition: all .2s; font-size: 14px;
+        }
+        .icon-btn-edit   { background: rgba(30,58,95,.08);  color: var(--navy); }
+        .icon-btn-edit:hover   { background: rgba(30,58,95,.18); }
+        .icon-btn-delete { background: rgba(239,68,68,.08); color: var(--red); }
+        .icon-btn-delete:hover { background: rgba(239,68,68,.18); }
+
+        /* pagination */
+        .pagination {
+            display: flex; justify-content: center; align-items: center; gap: 6px;
+            margin-top: 28px;
+        }
+        .page-btn {
+            width: 36px; height: 36px; border-radius: 9px; border: 1.5px solid var(--border);
+            background: #fff; color: var(--text); font-family: 'Nunito',sans-serif;
+            font-weight: 800; font-size: 13px; cursor: pointer; transition: all .2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .page-btn:hover  { border-color: var(--orange); color: var(--orange); }
+        .page-btn.active { background: linear-gradient(135deg, var(--orange), var(--orange-light)); border-color: transparent; color: #fff; }
+
+        /* ── MODAL ───────────────────────────────── */
+        .modal-bg {
+            position: fixed; inset: 0; z-index: 200;
+            background: rgba(23,46,66,.7); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center;
+        }
+        .modal-bg.open { display: flex; }
+        .modal {
+            background: #fff; border-radius: 22px;
+            width: 640px; max-width: 95vw; max-height: 90vh; overflow-y: auto;
+            padding: 32px;
+            animation: modalPop .3s cubic-bezier(.34,1.56,.64,1);
+        }
+        @keyframes modalPop { from { opacity: 0; transform: scale(.92) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+        .modal-title { font-size: 20px; font-weight: 900; color: var(--navy-dark); }
+        .modal-close {
+            width: 36px; height: 36px; border-radius: 50%; border: none;
+            background: rgba(239,68,68,.1); color: var(--red); cursor: pointer;
+            font-size: 18px; font-weight: 700; display: flex;
+            align-items: center; justify-content: center; transition: all .2s;
+        }
+        .modal-close:hover { background: var(--red); color: #fff; transform: rotate(90deg); }
+
+        .form-row { display: grid; gap: 18px; margin-bottom: 18px; }
+        .form-row.full { grid-template-columns: 1fr; }
+        .form-group { display: flex; flex-direction: column; gap: 7px; }
+        .form-label { font-size: 12px; font-weight: 800; color: var(--text-soft); text-transform: uppercase; letter-spacing: 1px; }
+        .form-input, .form-select, .form-textarea {
+            height: 44px; padding: 0 14px;
+            border: 2px solid var(--border); border-radius: 11px;
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 600;
+            color: var(--text); background: #fff; outline: none;
+            transition: border-color .2s;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--orange); }
+        .form-textarea { height: 90px; padding: 12px 14px; resize: vertical; }
+
+        /* answers builder */
+        .answers-builder { display: flex; flex-direction: column; gap: 10px; }
+        .answer-row {
+            display: flex; align-items: center; gap: 10px;
+        }
+        .answer-radio { accent-color: var(--orange); width: 18px; height: 18px; cursor: pointer; flex-shrink: 0; }
+        .answer-input {
+            flex: 1; height: 40px; padding: 0 12px;
+            border: 2px solid var(--border); border-radius: 10px;
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 600;
+            color: var(--text); outline: none; transition: border-color .2s;
+        }
+        .answer-input:focus { border-color: var(--orange); }
+        .answer-label { font-size: 12px; font-weight: 800; color: var(--text-soft); width: 22px; flex-shrink: 0; }
+        .correct-hint { font-size: 11px; font-weight: 700; color: var(--text-soft); margin-bottom: 4px; }
+
+        .modal-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .btn-cancel {
+            height: 44px; padding: 0 22px; border-radius: 12px;
+            border: 2px solid var(--border); background: #fff;
+            font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px;
+            color: var(--text); cursor: pointer; transition: all .2s;
+        }
+        .btn-cancel:hover { border-color: var(--orange); color: var(--orange); }
+        .btn-save {
+            height: 44px; padding: 0 28px; border-radius: 12px; border: none;
+            background: linear-gradient(135deg, var(--orange), var(--orange-light));
+            font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px;
+            color: #fff; cursor: pointer;
+            transition: all .2s;
+        }
+
+        /* toast */
+        .toast {
+            position: fixed; bottom: 28px; right: 28px; z-index: 300;
+            background: var(--navy-dark); color: #fff;
+            padding: 14px 22px; border-radius: 14px;
+            font-size: 14px; font-weight: 700;
+            display: flex; align-items: center; gap: 10px;
+            opacity: 0; transform: translateY(20px);
+            transition: all .3s;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+        /* responsive */
+        @media (max-width: 900px) {
+            .stats-row { grid-template-columns: 1fr 1fr; }
+            .charts-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .stats-row { grid-template-columns: 1fr; }
+            .page { padding: 20px 16px; }
+            .topbar { padding: 0 16px; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(210,122,45,.25); border-radius: 10px; }
+
+        /* empty state */
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-soft); }
+        .empty-icon { font-size: 48px; margin-bottom: 12px; }
+        .empty-label { font-size: 16px; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+    <div class="sb-logo">
+        <div class="logo-badge">5</div>
+        <div style="overflow:hidden;">
+            <div class="logo-text">5 SECONDES CHRONO</div>
+            <div class="logo-sub">Administration</div>
+        </div>
+    </div>
+
+    <button class="sb-toggle" id="sidebarToggle" title="Réduire">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
+    </button>
+
+    <nav class="sb-nav">
+        <div class="sb-section-label">Général</div>
+
+        <button class="nav-item active" data-page="dashboard">
+            <span class="ni-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 10a8 8 0 1116 0A8 8 0 012 10zm8-3a1 1 0 100-2 1 1 0 000 2zm-1 8a1 1 0 102 0V9a1 1 0 10-2 0v6z"/>
+                </svg>
+            </span>
+            <span class="ni-label">Tableau de bord</span>
+        </button>
+
+        <div class="sb-section-label">Contenu</div>
+
+        <button class="nav-item" data-page="questions">
+            <span class="ni-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                </svg>
+            </span>
+            <span class="ni-label">Questions / Quiz</span>
+            <span class="nav-badge">50</span>
+        </button>
+
+        <!-- <button class="nav-item" data-page="#">
+            <span class="ni-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm12.553 1.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
+                </svg>
+            </span>
+            <span class="ni-label">Vidéos</span>
+            <span class="nav-badge">10</span>
+        </button>
+
+        <div class="sb-section-label">Abonnés</div>
+
+        <button class="nav-item" data-page="#">
+            <span class="ni-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                </svg>
+            </span>
+            <span class="ni-label">Abonnés</span>
+        </button>
+
+        <button class="nav-item" data-page="#">
+            <span class="ni-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"/>
+                </svg>
+            </span>
+            <span class="ni-label">Encaissements</span>
+        </button>
+
+        <div class="sb-section-label">Analytics</div>
+
+        <button class="nav-item" data-page="#">
+            <span class="ni-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                </svg>
+            </span>
+            <span class="ni-label">Statistiques</span>
+        </button>  -->
+    </nav>
+
+    <div class="sb-user">
+        <div class="sb-avatar">A</div>
+        <div class="sb-user-info">
+            <div class="sb-user-name">Administrateur</div>
+            <div class="sb-user-role">Super Admin</div>
+        </div>
+    </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main" id="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+        <div class="topbar-title" id="topbarTitle">Tableau de bord</div>
+        <div class="topbar-actions">
+            <button class="topbar-btn topbar-btn-secondary" id="topbarSecBtn" style="display:none;" onclick="openModal()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                </svg>
+                Nouvelle question
+            </button>
+            <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#D27A2D,#F59E0B);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;">A</div>
+        </div>
+    </header>
+
+    <!-- ── PAGE: DASHBOARD ── -->
+    <div class="page active" id="page-dashboard">
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <svg width="22" height="22" fill="currentColor" viewBox="0 0 20 20"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>
+                </div>
+                <div class="stat-value">248</div>
+                <div class="stat-label">Abonnés actifs</div>
+                <div class="stat-delta up">↑ +12 ce mois</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <svg width="22" height="22" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+                </div>
+                <div class="stat-value">1 284</div>
+                <div class="stat-label">Quiz réalisés</div>
+                <div class="stat-delta up">↑ +87 cette semaine</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <svg width="22" height="22" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+                <div class="stat-value">67%</div>
+                <div class="stat-label">Taux de réussite</div>
+                <div class="stat-delta up">↑ +3% vs mois dernier</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon navy">
+                    <svg width="22" height="22" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h7a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h4a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+                </div>
+                <div class="stat-value">50</div>
+                <div class="stat-label">Questions actives</div>
+                <div class="stat-delta up">↑ +5 ce mois</div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <!-- Bar chart -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Quiz réalisés – 6 derniers mois</span>
+                    <span class="card-badge">2025-2026</span>
+                </div>
+                <div class="bar-chart" id="barChart">
+                    <!-- generated by JS -->
+                </div>
+                <div style="display:flex;gap:16px;margin-top:14px;">
+                    <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--text-soft);">
+                        <div style="width:12px;height:12px;border-radius:3px;background:linear-gradient(135deg,#D27A2D,#F59E0B);"></div> Quiz réalisés
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--text-soft);">
+                        <div style="width:12px;height:12px;border-radius:3px;background:linear-gradient(135deg,#1e3a5f,#254b73);"></div> Bonnes réponses
+                    </div>
+                </div>
+            </div>
+
+            <!-- Donut -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Répartition abonnés</span>
+                </div>
+                <div class="donut-wrap">
+                    <div class="donut-svg-wrap">
+                        <svg width="140" height="140" viewBox="0 0 140 140">
+                            <circle cx="70" cy="70" r="54" fill="none" stroke="#f3ece3" stroke-width="16"/>
+                            <!-- Apprenti 45% -->
+                            <circle cx="70" cy="70" r="54" fill="none" stroke="#D27A2D" stroke-width="16"
+                                stroke-dasharray="152 187" stroke-dashoffset="0" stroke-linecap="round"
+                                transform="rotate(-90 70 70)"/>
+                            <!-- Compagnon 35% -->
+                            <circle cx="70" cy="70" r="54" fill="none" stroke="#1e3a5f" stroke-width="16"
+                                stroke-dasharray="118 221" stroke-dashoffset="-152" stroke-linecap="round"
+                                transform="rotate(-90 70 70)"/>
+                            <!-- Réussite 20% -->
+                            <circle cx="70" cy="70" r="54" fill="none" stroke="#10B981" stroke-width="16"
+                                stroke-dasharray="67 272" stroke-dashoffset="-270" stroke-linecap="round"
+                                transform="rotate(-90 70 70)"/>
+                        </svg>
+                        <div class="donut-center">
+                            <span class="donut-pct">248</span>
+                            <span class="donut-sub">abonnés</span>
+                        </div>
+                    </div>
+                    <div class="donut-legend">
+                        <div class="legend-item"><div class="legend-dot" style="background:#D27A2D;"></div>Apprenti<span class="legend-val">112 (45%)</span></div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#1e3a5f;"></div>Compagnon<span class="legend-val">87 (35%)</span></div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#10B981;"></div>Réussite<span class="legend-val">49 (20%)</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent results -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Derniers quiz réalisés</span>
+                <span class="card-badge">Aujourd'hui</span>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Utilisateur</th>
+                            <th>Thématique</th>
+                            <th>Score</th>
+                            <th>Temps moyen</th>
+                            <th>Formule</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Marie Dupont</strong></td>
+                            <td>Bail commercial</td>
+                            <td style="color:var(--green);font-weight:800;">8 / 10</td>
+                            <td>3.2s</td>
+                            <td><span class="tag tag-green">Réussite</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Paul Martin</strong></td>
+                            <td>Fonds de commerce</td>
+                            <td style="color:var(--orange);font-weight:800;">6 / 10</td>
+                            <td>4.1s</td>
+                            <td><span class="tag tag-orange">Compagnon</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Léa Bernard</strong></td>
+                            <td>Bail dérogatoire</td>
+                            <td style="color:var(--red);font-weight:800;">4 / 10</td>
+                            <td>4.8s</td>
+                            <td><span class="tag tag-navy">Apprenti</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Thomas Leclerc</strong></td>
+                            <td>Bail professionnel</td>
+                            <td style="color:var(--green);font-weight:800;">9 / 10</td>
+                            <td>2.7s</td>
+                            <td><span class="tag tag-green">Réussite</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sophie Girard</strong></td>
+                            <td>Bail commercial</td>
+                            <td style="color:var(--orange);font-weight:800;">7 / 10</td>
+                            <td>3.9s</td>
+                            <td><span class="tag tag-orange">Compagnon</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── PAGE: QUESTIONS ── -->
+    <div class="page" id="page-questions">
+
+        <div class="q-toolbar">
+            <div class="search-wrap">
+                <svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+                </svg>
+                <input type="text" class="search-box" id="searchInput" placeholder="Rechercher une question..." oninput="filterQuestions()">
+            </div>
+            <select class="filter-select" id="filterBail" onchange="filterQuestions()">
+                <option value="">Tous les types</option>
+                <option value="Commercial">Bail Commercial</option>
+                <option value="Professionnel">Bail Professionnel</option>
+                <option value="Dérogatoire">Bail Dérogatoire</option>
+                <option value="Fonds">Fonds de commerce</option>
+            </select>
+        </div>
+
+        <div class="q-list" id="qList"></div>
+
+        <div class="pagination">
+            <button class="page-btn">‹</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">›</button>
+        </div>
+    </div>
+
+</div><!-- end .main -->
+
+<!-- ── MODAL: ADD / EDIT QUESTION ── -->
+<div class="modal-bg" id="modalBg">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title" id="modalTitle">Nouvelle question</span>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+
+        <div class="form-row full">
+            <div class="form-group">
+                <label class="form-label">Question</label>
+                <textarea class="form-textarea" id="fQuestion" placeholder="Saisir la question ici..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Type de bail</label>
+                <select class="form-select" id="fBail">
+                    <option>Bail Commercial</option>
+                    <option>Bail Professionnel</option>
+                    <option>Bail Dérogatoire</option>
+                    <option>Fonds de commerce</option>
+                    <option>Droit des sociétés</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:18px;">
+            <label class="form-label">Réponses <span style="font-weight:600;text-transform:none;letter-spacing:0;font-size:11px;">(sélectionner la bonne réponse)</span></label>
+            <div class="answers-builder">
+                <div class="answer-row">
+                    <span class="answer-label">A</span>
+                    <input class="answer-input" id="fA1" placeholder="Réponse A">
+                    <input type="radio" class="answer-radio" name="correct" value="0">
+                </div>
+                <div class="answer-row">
+                    <span class="answer-label">B</span>
+                    <input class="answer-input" id="fA2" placeholder="Réponse B">
+                    <input type="radio" class="answer-radio" name="correct" value="1">
+                </div>
+                <div class="answer-row">
+                    <span class="answer-label">C</span>
+                    <input class="answer-input" id="fA3" placeholder="Réponse C">
+                    <input type="radio" class="answer-radio" name="correct" value="2">
+                </div>
+                <div class="answer-row">
+                    <span class="answer-label">D</span>
+                    <input class="answer-input" id="fA4" placeholder="Réponse D">
+                    <input type="radio" class="answer-radio" name="correct" value="3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row full">
+            <div class="form-group">
+                <label class="form-label">Explication de la bonne réponse</label>
+                <textarea class="form-textarea" id="fExplain" placeholder="Explication affichée après réponse..."></textarea>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+            <button class="btn-save" onclick="saveQuestion()">Enregistrer</button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+    <div class="toast-dot"></div>
+    <span id="toastMsg">Enregistré avec succès !</span>
+</div>
+
+<script>
+    // ── DATA ──────────────────────────────────────
+    let questions = [
+        { id:1, text:"Quelle est la durée minimale légale d'un bail commercial en France ?", bail:"Commercial", answers:["3 ans","6 ans","9 ans","12 ans"], correct:2, explanation:"La durée minimale légale est de 9 ans selon l'article L145-4 du Code de commerce.", taux:72, temps:"3.1s" },
+        { id:2, text:"À quelle fréquence le loyer d'un bail commercial peut-il être révisé ?", bail:"Commercial", answers:["Tous les ans","Tous les 2 ans","Tous les 3 ans","Tous les 5 ans"], correct:0, explanation:"Le loyer peut être révisé tous les ans, plafonné par l'ILC.", taux:58, temps:"4.2s" },
+        { id:3, text:"Quel est le délai de préavis pour un congé donné par le bailleur à l'échéance du bail ?", bail:"Commercial", answers:["3 mois","6 mois","9 mois","12 mois"], correct:1, explanation:"Le bailleur doit donner congé au moins 6 mois avant l'échéance.", taux:61, temps:"3.8s" },
+        { id:4, text:"Qu'est-ce que le déplafonnement du loyer ?", bail:"Commercial", answers:["L'augmentation libre du loyer","La possibilité de dépasser la variation de l'indice","La suppression du loyer","Le gel du loyer"], correct:1, explanation:"Le déplafonnement permet de demander un loyer supérieur à la variation de l'indice légal lors du renouvellement.", taux:39, temps:"4.7s" },
+        { id:5, text:"Quelle est la durée maximale d'un bail dérogatoire ?", bail:"Dérogatoire", answers:["1 an","2 ans","3 ans","5 ans"], correct:2, explanation:"Le bail dérogatoire (ou précaire) ne peut excéder 3 ans au total.", taux:55, temps:"4.0s" },
+        { id:6, text:"Un bail professionnel s'applique aux professions libérales : vrai ou faux ?", bail:"Professionnel", answers:["Vrai","Faux","Parfois","Jamais"], correct:0, explanation:"Le bail professionnel est spécifiquement réservé aux professions libérales et activités non commerciales.", taux:81, temps:"2.5s" },
+        { id:7, text:"Quel est le montant minimum du fonds de commerce pour être cédé ?", bail:"Fonds", answers:["Aucun minimum légal","10 000€","50 000€","100 000€"], correct:0, explanation:"Il n'existe pas de montant minimum légal pour la cession d'un fonds de commerce.", taux:33, temps:"4.9s" },
+        { id:8, text:"La clause de destination permet de définir :", bail:"Commercial", answers:["Le loyer","L'activité autorisée","La durée","Le dépôt de garantie"], correct:1, explanation:"La clause de destination précise la nature de l'activité que le locataire est autorisé à exercer dans les locaux.", taux:76, temps:"2.9s" },
+    ];
+
+    let editingId = null;
+
+    // ── NAVIGATION ─────────────────────────────────
+    document.querySelectorAll('.nav-item[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const page = btn.dataset.page;
+            if(page === '#') return;
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+            document.getElementById('topbarTitle').textContent = btn.querySelector('.ni-label').textContent.trim();
+            document.getElementById('topbarSecBtn').style.display = page === 'questions' ? 'flex' : 'none';
+        });
+    });
+
+    // ── SIDEBAR TOGGLE ─────────────────────────────
+    document.getElementById('sidebarToggle').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+    });
+
+    // ── BAR CHART ─────────────────────────────────
+    const barData = [
+        { month:'Sep', total:180, correct:110 },
+        { month:'Oct', total:210, correct:145 },
+        { month:'Nov', total:195, correct:130 },
+        { month:'Déc', total:160, correct:102 },
+        { month:'Jan', total:240, correct:165 },
+        { month:'Fév', total:299, correct:195 },
+    ];
+    const maxVal = Math.max(...barData.map(d => d.total));
+    const barChart = document.getElementById('barChart');
+    barData.forEach(d => {
+        const hTotal   = Math.round((d.total   / maxVal) * 140);
+        const hCorrect = Math.round((d.correct / maxVal) * 140);
+        barChart.innerHTML += `
+            <div class="bar-group">
+                <div style="display:flex;align-items:flex-end;gap:4px;height:140px;">
+                    <div class="bar" style="width:20px;height:${hTotal}px;" title="${d.total} quiz"></div>
+                    <div class="bar alt" style="width:20px;height:${hCorrect}px;" title="${d.correct} correctes"></div>
+                </div>
+                <div class="bar-label">${d.month}</div>
+            </div>`;
+    });
+
+    // ── QUESTIONS RENDER ───────────────────────────
+    function renderQuestions(list) {
+        const container = document.getElementById('qList');
+        if(!list.length) {
+            container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-label">Aucune question trouvée</div></div>`;
+            return;
+        }
+        const diffLabel = { easy:'Facile', medium:'Moyen', hard:'Difficile' };
+        container.innerHTML = list.map(q => `
+            <div class="q-card" onclick="editQuestion(${q.id})">
+                <div class="q-num">${q.id}</div>
+                <div class="q-body">
+                    <div class="q-text">${q.text}</div>
+                    <div class="q-meta">
+                        <span class="tag tag-orange">${q.bail}</span>
+                        <span class="q-stats">
+                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            Réussite : ${q.taux}%
+                        </span>
+                        <span class="q-stats">⏱ ${q.temps} moy.</span>
+                    </div>
+                </div>
+                <div class="q-actions" onclick="event.stopPropagation()">
+                    <button class="icon-btn icon-btn-edit" title="Modifier" onclick="editQuestion(${q.id})">✏️</button>
+                    <button class="icon-btn icon-btn-delete" title="Supprimer" onclick="deleteQuestion(${q.id})">🗑️</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function filterQuestions() {
+        const q  = document.getElementById('searchInput').value.toLowerCase();
+        const b  = document.getElementById('filterBail').value;
+        const d  = document.getElementById('filterDiff').value;
+        renderQuestions(questions.filter(x =>
+            (!q || x.text.toLowerCase().includes(q)) &&
+            (!b || x.bail.includes(b)) &&
+            (!d || x.diff === d)
+        ));
+    }
+
+    // initial render
+    renderQuestions(questions);
+
+    // ── MODAL ─────────────────────────────────────
+    function openModal(id = null) {
+        editingId = id;
+        document.getElementById('modalTitle').textContent = id ? 'Modifier la question' : 'Nouvelle question';
+        if(id) {
+            const q = questions.find(x => x.id === id);
+            document.getElementById('fQuestion').value = q.text;
+            document.getElementById('fBail').value = q.bail + (q.bail.startsWith('Bail') ? '' : '');
+            ['fA1','fA2','fA3','fA4'].forEach((fid, i) => document.getElementById(fid).value = q.answers[i] || '');
+            document.querySelectorAll('input[name="correct"]').forEach((r,i) => r.checked = (i === q.correct));
+            document.getElementById('fExplain').value = q.explanation;
+        } else {
+            ['fQuestion','fA1','fA2','fA3','fA4','fExplain'].forEach(id => document.getElementById(id).value = '');
+            document.querySelectorAll('input[name="correct"]').forEach(r => r.checked = false);
+        }
+        document.getElementById('modalBg').classList.add('open');
+    }
+
+    function closeModal() {
+        document.getElementById('modalBg').classList.remove('open');
+        editingId = null;
+    }
+
+    function saveQuestion() {
+        const text = document.getElementById('fQuestion').value.trim();
+        if(!text) { alert('La question ne peut pas être vide.'); return; }
+        const answers = ['fA1','fA2','fA3','fA4'].map(id => document.getElementById(id).value.trim());
+        const correctRadio = document.querySelector('input[name="correct"]:checked');
+        const correct = correctRadio ? parseInt(correctRadio.value) : 0;
+        const q = {
+            id: editingId || (Math.max(0,...questions.map(x=>x.id)) + 1),
+            text,
+            bail: document.getElementById('fBail').value,
+            answers,
+            correct,
+            explanation: document.getElementById('fExplain').value.trim(),
+            taux: Math.floor(Math.random() * 40 + 40),
+            temps: (Math.random() * 2.5 + 2).toFixed(1) + 's'
+        };
+        if(editingId) {
+            const idx = questions.findIndex(x => x.id === editingId);
+            questions[idx] = q;
+            showToast('Question modifiée avec succès !');
+        } else {
+            questions.unshift(q);
+            showToast('Question ajoutée avec succès !');
+        }
+        closeModal();
+        filterQuestions();
+        // update badge
+        document.querySelector('.nav-badge').textContent = questions.length;
+    }
+
+    function editQuestion(id) {
+        // switch to questions page just in case
+        openModal(id);
+    }
+
+    function deleteQuestion(id) {
+        if(!confirm('Supprimer cette question ?')) return;
+        questions = questions.filter(x => x.id !== id);
+        filterQuestions();
+        document.querySelector('.nav-badge').textContent = questions.length;
+        showToast('Question supprimée.');
+    }
+
+    // ── TOAST ─────────────────────────────────────
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        document.getElementById('toastMsg').textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // close modal on backdrop click
+    document.getElementById('modalBg').addEventListener('click', e => { if(e.target === e.currentTarget) closeModal(); });
+</script>
+</body>
+</html>
