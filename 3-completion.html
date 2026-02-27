@@ -5,23 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5 Secondes Chrono - Session Terminée</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Sidebar partagée -->
+    <link rel="stylesheet" href="sidebar.css">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            padding: 2rem 1rem;
             font-family: 'DM Sans', sans-serif;
             background: #FFFFFF;
             color: #1E3A5F;
             min-height: 100vh;
+        }
+
+        /* Le contenu est centré à l'intérieur de sb-main-content */
+        .sb-main-content {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
         }
 
         .completion-container {
@@ -31,567 +35,232 @@
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* Header with Mascot */
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+        /* Header */
+        .header { text-align: center; margin-bottom: 2rem; }
 
-        .mascot-container {
-            margin-bottom: 1.5rem;
-            animation: bounceIn 0.6s ease-out;
-        }
-
+        .mascot-container { margin-bottom: 1.5rem; animation: bounceIn 0.6s ease-out; }
         @keyframes bounceIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.3);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            70% {
-                transform: scale(0.9);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
+            0%   { opacity: 0; transform: scale(0.3); }
+            50%  { transform: scale(1.05); }
+            70%  { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        .mascot-image {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto;
-            display: block;
-        }
-
-        .completion-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #D27A2D;
-            margin-bottom: 0.5rem;
-        }
-
-        .completion-message {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #1E3A5F;
-            margin-bottom: 0.3rem;
-        }
-
-        .completion-subtitle {
-            font-size: 0.95rem;
-            color: #6B7280;
-        }
+        .mascot-image { width: 150px; height: 150px; margin: 0 auto; display: block; }
+        .completion-title    { font-size: 1.75rem; font-weight: 700; color: #D27A2D; margin-bottom: 0.5rem; }
+        .completion-message  { font-size: 1.1rem; font-weight: 600; color: #1E3A5F; margin-bottom: 0.3rem; }
+        .completion-subtitle { font-size: 0.95rem; color: #6B7280; }
 
         /* Stats Cards */
-        .stats-container {
-            display: flex;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
+        .stats-container { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
         .stat-card {
-            flex: 1;
-            background: #F8F9FA;
-            border: 2px solid #E8E9EB;
-            border-radius: 16px;
-            padding: 1.25rem 1rem;
-            text-align: center;
+            flex: 1; background: #F8F9FA; border: 2px solid #E8E9EB;
+            border-radius: 16px; padding: 1.25rem 1rem; text-align: center;
             transition: all 0.3s;
         }
-
-        .stat-card:hover {
-            background: #FFFFFF;
-            border-color: #D27A2D;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(210, 122, 45, 0.1);
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #6B7280;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #D27A2D;
-            line-height: 1;
-        }
-
-        .stat-card.accuracy .stat-value {
-            color: #58CC02;
-        }
+        .stat-card:hover { background: #FFFFFF; border-color: #D27A2D; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(210,122,45,0.1); }
+        .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #6B7280; margin-bottom: 0.5rem; font-weight: 500; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: #D27A2D; line-height: 1; }
+        .stat-card.accuracy .stat-value { color: #58CC02; }
 
         /* Score Details */
-        .score-details {
-            background: #F8F9FA;
-            border: 2px solid #E8E9EB;
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
+        .score-details { background: #F8F9FA; border: 2px solid #E8E9EB; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .score-row { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #E8E9EB; }
+        .score-row:last-child { border-bottom: none; }
+        .score-label-text  { font-size: 0.95rem; font-weight: 500; color: #374151; }
+        .score-value-text  { font-size: 1.1rem; font-weight: 700; }
+        .score-value-text.correct   { color: #58CC02; }
+        .score-value-text.incorrect { color: #FF4B4B; }
+        .score-value-text.time      { color: #1CB0F6; }
 
-        .score-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #E8E9EB;
-        }
+        /* Progress */
+        .progress-section { margin-bottom: 1.5rem; }
+        .progress-header  { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+        .progress-label   { font-size: 0.85rem; color: #6B7280; font-weight: 500; }
+        .progress-info    { font-size: 0.85rem; font-weight: 600; color: #D27A2D; }
+        .progress-bar     { height: 14px; background: #E8E9EB; border-radius: 50px; overflow: hidden; }
+        .progress-fill    { height: 100%; background: linear-gradient(90deg,#D27A2D,#FFA500); border-radius: 50px; transition: width 1s cubic-bezier(0.4,0,0.2,1); width: 0; }
 
-        .score-row:last-child {
-            border-bottom: none;
-        }
+        /* Boutons */
+        .actions { display: flex; flex-direction: column; gap: 0.75rem; }
+        .btn { width: 100%; padding: 1rem; border-radius: 12px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+        .btn-primary   { background: #58CC02; color: #FFFFFF; box-shadow: 0 4px 0 #46A302; }
+        .btn-primary:hover  { background: #61D802; transform: translateY(-2px); box-shadow: 0 6px 0 #46A302; }
+        .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #46A302; }
+        .btn-secondary { background: transparent; border: 2px solid #D1D5DB; color: #374151; }
+        .btn-secondary:hover { background: #F8F9FA; border-color: #9CA3AF; }
 
-        .score-label-text {
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: #374151;
-        }
-
-        .score-value-text {
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .score-value-text.correct {
-            color: #58CC02;
-        }
-
-        .score-value-text.incorrect {
-            color: #FF4B4B;
-        }
-
-        .score-value-text.time {
-            color: #1CB0F6;
-        }
-
-        /* Progress Bar */
-        .progress-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-
-        .progress-label {
-            font-size: 0.85rem;
-            color: #6B7280;
-            font-weight: 500;
-        }
-
-        .progress-info {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #D27A2D;
-        }
-
-        .progress-bar {
-            height: 14px;
-            background: #E8E9EB;
-            border-radius: 50px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #D27A2D 0%, #FFA500 100%);
-            border-radius: 50px;
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 0;
-        }
-
-        /* Actions */
-        .actions {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 1rem;
-            border-radius: 12px;
-            border: none;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        .btn-primary {
-            background: #58CC02;
-            color: #FFFFFF;
-            box-shadow: 0 4px 0 #46A302;
-        }
-
-        .btn-primary:hover {
-            background: #61D802;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0 #46A302;
-        }
-
-        .btn-primary:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #46A302;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid #D1D5DB;
-            color: #374151;
-        }
-
-        .btn-secondary:hover {
-            background: #F8F9FA;
-            border-color: #9CA3AF;
-        }
-
-        /* Loading State */
-        .loading {
-            text-align: center;
-            padding: 3rem 2rem;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #E8E9EB;
-            border-top-color: #D27A2D;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 1.5rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: #6B7280;
-            font-size: 1rem;
-            font-weight: 500;
-        }
+        /* Loading */
+        .loading { text-align: center; padding: 3rem 2rem; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #E8E9EB; border-top-color: #D27A2D; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1.5rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { color: #6B7280; font-size: 1rem; font-weight: 500; }
 
         /* Responsive */
         @media (max-width: 600px) {
-            .completion-title {
-                font-size: 1.5rem;
-            }
-
-            .completion-message {
-                font-size: 1rem;
-            }
-
-            .mascot-image {
-                width: 120px;
-                height: 120px;
-            }
-
-            .stat-value {
-                font-size: 1.75rem;
-            }
-
-            .stats-container {
-                flex-direction: column;
-            }
+            .completion-title  { font-size: 1.5rem; }
+            .completion-message{ font-size: 1rem; }
+            .mascot-image      { width: 120px; height: 120px; }
+            .stat-value        { font-size: 1.75rem; }
+            .stats-container   { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Loading -->
-    <div id="loading" class="loading">
-        <div class="spinner"></div>
-        <p class="loading-text">Calcul de tes résultats...</p>
-    </div>
+    <!-- La sidebar sera injectée ici par sidebar.js -->
 
-    <!-- Results Container -->
-    <div id="resultsContainer" class="completion-container" style="display: none;">
-        
-        <!-- Header with Mascot -->
-        <div class="header">
-            <div class="mascot-container">
-                <img id="mascotImage" src="" alt="Mascotte" class="mascot-image">
-            </div>
-            <h1 class="completion-title">Leçon terminée !</h1>
-            <p class="completion-message" id="completionMessage">Bien joué !</p>
-            <p class="completion-subtitle" id="completionSubtitle">Continue comme ça</p>
+    <div class="sb-main-content">
+
+        <!-- Loading -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p class="loading-text">Calcul de tes résultats...</p>
         </div>
 
-        <!-- Stats Cards -->
-        <div class="stats-container">
-            <div class="stat-card xp">
-                <div class="stat-label">XP Gagnés</div>
-                <div class="stat-value" id="xpEarned">0</div>
+        <!-- Résultats -->
+        <div id="resultsContainer" class="completion-container" style="display:none;">
+
+            <div class="header">
+                <div class="mascot-container">
+                    <img id="mascotImage" src="" alt="Mascotte" class="mascot-image">
+                </div>
+                <h1 class="completion-title">Leçon terminée !</h1>
+                <p class="completion-message"  id="completionMessage">Bien joué !</p>
+                <p class="completion-subtitle" id="completionSubtitle">Continue comme ça</p>
             </div>
-            <div class="stat-card accuracy">
-                <div class="stat-label">Précision</div>
-                <div class="stat-value" id="accuracyPercent">0%</div>
+
+            <div class="stats-container">
+                <div class="stat-card xp">
+                    <div class="stat-label">XP Gagnés</div>
+                    <div class="stat-value" id="xpEarned">0</div>
+                </div>
+                <div class="stat-card accuracy">
+                    <div class="stat-label">Précision</div>
+                    <div class="stat-value" id="accuracyPercent">0%</div>
+                </div>
             </div>
+
+            <div class="score-details">
+                <div class="score-row">
+                    <span class="score-label-text">Bonnes réponses</span>
+                    <span class="score-value-text correct"   id="correctCount">0</span>
+                </div>
+                <div class="score-row">
+                    <span class="score-label-text">Mauvaises réponses</span>
+                    <span class="score-value-text incorrect" id="incorrectCount">0</span>
+                </div>
+                <div class="score-row">
+                    <span class="score-label-text">Temps moyen</span>
+                    <span class="score-value-text time"      id="avgTime">0.0s</span>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span class="progress-label">Progression vers le niveau <span id="nextLevel">4</span></span>
+                    <span class="progress-info"><span id="currentXP">0</span>/<span id="nextLevelXP">100</span> XP</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary"   onclick="continueToNext()">CONTINUER</button>
+                <button class="btn btn-secondary" onclick="viewAnswers()">Revoir mes réponses</button>
+            </div>
+
         </div>
 
-        <!-- Score Details -->
-        <div class="score-details">
-            <div class="score-row">
-                <span class="score-label-text">Bonnes réponses</span>
-                <span class="score-value-text correct" id="correctCount">0</span>
-            </div>
-            <div class="score-row">
-                <span class="score-label-text">Mauvaises réponses</span>
-                <span class="score-value-text incorrect" id="incorrectCount">0</span>
-            </div>
-            <div class="score-row">
-                <span class="score-label-text">Temps moyen</span>
-                <span class="score-value-text time" id="avgTime">0.0s</span>
-            </div>
-        </div>
+    </div><!-- fin sb-main-content -->
 
-        <!-- Progress Section -->
-        <div class="progress-section">
-            <div class="progress-header">
-                <span class="progress-label">Progression vers le niveau <span id="nextLevel">4</span></span>
-                <span class="progress-info"><span id="currentXP">0</span>/<span id="nextLevelXP">100</span> XP</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="actions">
-            <button class="btn btn-primary" onclick="continueToNext()">
-                CONTINUER
-            </button>
-            <button class="btn btn-secondary" onclick="viewAnswers()">
-                Revoir mes réponses
-            </button>
-        </div>
-
-    </div>
+    <!-- Sidebar chargée en dernier -->
+    <script src="sidebar.js"></script>
 
     <script>
-        // API Configuration
-        const API_BASE_URL = 'http://localhost:3000/api'; // À adapter selon votre configuration
-        
-        // Variables globales
-        let sessionId = null;
-        let sessionData = null;
-
-        // Configuration des mascottes et messages selon le score
         const mascotConfig = {
             ranges: [
-                {
-                    min: 0,
-                    max: 25,
-                    mascot: 'mascotte/no_bg/triste.png',
-                    message: 'Oups…',
-                    subtitle: 'Ne t\'inquiète pas, on va progresser ensemble !'
-                },
-                {
-                    min: 25,
-                    max: 50,
-                    mascot: 'mascotte/no_bg/gene.png',
-                    message: 'Peut mieux faire',
-                    subtitle: 'Tu y es presque, continue à t\'entraîner'
-                },
-                {
-                    min: 50,
-                    max: 75,
-                    mascot: 'mascotte/no_bg/bravo.png',
-                    message: 'Bien',
-                    subtitle: 'Bon travail, tu progresses !'
-                },
-                {
-                    min: 75,
-                    max: 90,
-                    mascot: 'mascotte/no_bg/applaudit.png',
-                    message: 'Très bien',
-                    subtitle: 'Excellent score, tu es sur la bonne voie !'
-                },
-                {
-                    min: 90,
-                    max: 100,
-                    mascot: 'mascotte/no_bg/felicitations100.png',
-                    message: 'Excellent / Parfait',
-                    subtitle: 'Incroyable ! Tu es un champion !'
-                }
+                { min:0,  max:25,  mascot:'mascotte/no_bg/triste.png',          message:'Oups…',           subtitle:'Ne t\'inquiète pas, on va progresser ensemble !' },
+                { min:25, max:50,  mascot:'mascotte/no_bg/gene.png',             message:'Peut mieux faire', subtitle:'Tu y es presque, continue à t\'entraîner' },
+                { min:50, max:75,  mascot:'mascotte/no_bg/bravo.png',            message:'Bien',             subtitle:'Bon travail, tu progresses !' },
+                { min:75, max:90,  mascot:'mascotte/no_bg/applaudit.png',        message:'Très bien',        subtitle:'Excellent score, tu es sur la bonne voie !' },
+                { min:90, max:100, mascot:'mascotte/no_bg/felicitations100.png', message:'Parfait !',        subtitle:'Incroyable ! Tu es un champion !' }
             ]
         };
 
-        // Initialisation
+        let sessionId = null;
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Récupérer l'ID de session depuis l'URL
-            const urlParams = new URLSearchParams(window.location.search);
-            sessionId = urlParams.get('sessionId');
-            
-            if (!sessionId) {
-                alert('Session introuvable');
-                window.location.href = '1-selection.html';
-                return;
-            }
-            
+            sessionId = new URLSearchParams(window.location.search).get('sessionId');
+            if (!sessionId) { alert('Session introuvable'); window.location.href = '1-selection.html'; return; }
             loadSessionResults();
         });
 
-        // Déterminer la mascotte et le message selon le score
-        function getMascotConfig(successRate) {
-            for (let config of mascotConfig.ranges) {
-                if (successRate >= config.min && successRate <= config.max) {
-                    return config;
-                }
-            }
-            // Par défaut, retourner la config moyenne
-            return mascotConfig.ranges[2];
+        function getMascotConfig(rate) {
+            return mascotConfig.ranges.find(c => rate >= c.min && rate <= c.max) || mascotConfig.ranges[2];
         }
 
-        // Charger les résultats de la session
-        async function loadSessionResults() {
+        function loadSessionResults() {
             try {
-                // Simuler le chargement pour l'instant
-                // Dans la version réelle, vous appellerez: GET /api/quiz/sessions/:id
-                
+                // Lire les résultats sauvegardés par quiz.html
+                const saved = localStorage.getItem('quizResults');
+                const data  = saved ? JSON.parse(saved) : null;
+
                 setTimeout(() => {
-                    // Données simulées (remplacez par l'appel API réel)
-                    const mockData = {
-                        sessionId: sessionId,
-                        totalQuestions: 12,
-                        correctAnswers: 7,
-                        incorrectAnswers: 5,
-                        averageTime: 3.2,
-                        xpEarned: 12,
-                        userCurrentXP: 45,
-                        nextLevelXP: 100,
-                        userLevel: 3
-                    };
-                    
-                    displayResults(mockData);
+                    displayResults(data || {
+                        sessionId, totalQuestions:12, correctAnswers:7, incorrectAnswers:5,
+                        averageTime:3.2, xpEarned:12, userCurrentXP:45, nextLevelXP:100, userLevel:3
+                    });
                 }, 1200);
-                
-            } catch (error) {
-                console.error('Erreur lors du chargement des résultats:', error);
+            } catch (e) {
                 document.getElementById('loading').innerHTML = `
-                    <div style="text-align: center; color: #FF4B4B;">
-                        <p style="font-size: 1.2rem; margin-bottom: 1rem;">Erreur</p>
-                        <p style="color: #6B7280;">Impossible de charger les résultats</p>
-                        <button class="btn btn-primary" onclick="window.location.href='1-selection.html'" style="margin-top: 2rem; max-width: 200px;">
-                            Retour
-                        </button>
-                    </div>
-                `;
+                    <div style="text-align:center;color:#FF4B4B;">
+                        <p style="font-size:1.2rem;margin-bottom:1rem;">Erreur</p>
+                        <p style="color:#6B7280;">Impossible de charger les résultats</p>
+                        <button class="btn btn-primary" onclick="window.location.href='1-selection.html'" style="margin-top:2rem;max-width:200px;">Retour</button>
+                    </div>`;
             }
         }
 
-        // Afficher les résultats
         function displayResults(data) {
-            // Masquer le loading
             document.getElementById('loading').style.display = 'none';
             document.getElementById('resultsContainer').style.display = 'block';
-            
-            // Calculs
-            const correctAnswers = data.correctAnswers || 0;
-            const totalQuestions = data.totalQuestions || 0;
-            const incorrectAnswers = data.incorrectAnswers || 0;
-            const successRate = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
-            const avgTime = data.averageTime ? data.averageTime.toFixed(1) : '0.0';
-            
-            // Obtenir la configuration de la mascotte selon le score
+
+            const correct      = data.correctAnswers  || 0;
+            const total        = data.totalQuestions   || 0;
+            const incorrect    = data.incorrectAnswers || 0;
+            const successRate  = total > 0 ? Math.round((correct / total) * 100) : 0;
+            const avgTime      = data.averageTime ? parseFloat(data.averageTime).toFixed(1) : '0.0';
+            const xpEarned     = data.xpEarned      || 0;
+            const currentXP    = data.userCurrentXP  || 0;
+            const nextLevelXP  = data.nextLevelXP    || 100;
+            const currentLevel = data.userLevel      || 1;
+            const xpProgress   = ((currentXP / nextLevelXP) * 100).toFixed(0);
+
             const mascotData = getMascotConfig(successRate);
-            
-            // Mettre à jour la mascotte et les messages
-            document.getElementById('mascotImage').src = mascotData.mascot;
+            document.getElementById('mascotImage').src              = mascotData.mascot;
             document.getElementById('completionMessage').textContent = mascotData.message;
-            document.getElementById('completionSubtitle').textContent = mascotData.subtitle;
-            
-            // XP et progression
-            const xpEarned = data.xpEarned || 0;
-            const currentXP = data.userCurrentXP || 0;
-            const nextLevelXP = data.nextLevelXP || 100;
-            const currentLevel = data.userLevel || 1;
-            const xpProgress = ((currentXP / nextLevelXP) * 100).toFixed(0);
-            
-            // Mettre à jour les stats principales
-            document.getElementById('xpEarned').textContent = xpEarned;
+            document.getElementById('completionSubtitle').textContent= mascotData.subtitle;
+
+            document.getElementById('xpEarned').textContent       = xpEarned;
             document.getElementById('accuracyPercent').textContent = successRate + '%';
-            
-            // Mettre à jour les détails
-            document.getElementById('correctCount').textContent = correctAnswers;
-            document.getElementById('incorrectCount').textContent = incorrectAnswers;
-            document.getElementById('avgTime').textContent = avgTime + 's';
-            
-            // Mettre à jour la progression
-            document.getElementById('nextLevel').textContent = currentLevel + 1;
-            document.getElementById('currentXP').textContent = currentXP;
-            document.getElementById('nextLevelXP').textContent = nextLevelXP;
-            
-            // Animer la barre de progression
-            setTimeout(() => {
-                document.getElementById('progressFill').style.width = xpProgress + '%';
-            }, 300);
+            document.getElementById('correctCount').textContent    = correct;
+            document.getElementById('incorrectCount').textContent  = incorrect;
+            document.getElementById('avgTime').textContent         = avgTime + 's';
+            document.getElementById('nextLevel').textContent       = currentLevel + 1;
+            document.getElementById('currentXP').textContent       = currentXP;
+            document.getElementById('nextLevelXP').textContent     = nextLevelXP;
+
+            setTimeout(() => { document.getElementById('progressFill').style.width = xpProgress + '%'; }, 300);
         }
 
-        // Actions
-        function viewAnswers() {
-            // Dans la version réelle, rediriger vers une page de révision
-            alert('Fonctionnalité "Revoir mes réponses" - À implémenter');
-            // window.location.href = `review.html?sessionId=${sessionId}`;
-        }
-
-        function continueToNext() {
-            window.location.href = '1-selection.html';
-        }
-
-        // Appels API réels (à utiliser à la place des données simulées)
-        
-        /*
-        async function loadSessionResultsReal() {
-            try {
-                const token = localStorage.getItem('auth_token'); // Récupérer le token Auth0
-                
-                const response = await fetch(`${API_BASE_URL}/quiz/sessions/${sessionId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la récupération des résultats');
-                }
-                
-                const data = await response.json();
-                displayResults(data);
-                
-            } catch (error) {
-                console.error('Erreur:', error);
-                // Gérer l'erreur
-            }
-        }
-        */
+        function viewAnswers()   { alert('Fonctionnalité "Revoir mes réponses" — À implémenter'); }
+        function continueToNext(){ window.location.href = '1-selection.html'; }
     </script>
 
 </body>

@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5 Secondes Chrono - Sélection</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Sidebar partagée -->
+    <link rel="stylesheet" href="sidebar.css">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Nunito', sans-serif;
@@ -22,456 +22,76 @@
             overflow-x: hidden;
         }
 
-        /* Background animé avec mascottes */
+        /* ── Background animé ── */
         .animated-background {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: 0;
             background: #d27a2d96;
             overflow: hidden;
         }
 
-        .mascot-float {
-            position: absolute;
-            opacity: 0.25;
-            animation: float 20s infinite ease-in-out;
-            pointer-events: none;
-        }
+        .mascot-float { position: absolute; opacity: 0.25; animation: float 20s infinite ease-in-out; pointer-events: none; }
+        .mascot-float img { width: 100%; height: 100%; object-fit: contain; }
 
-        .mascot-float img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        /* Variations de couleur pour chaque mascotte */
-        .mascot-variant-1 img { filter: blur(3px) hue-rotate(0deg) brightness(1); }
-        .mascot-variant-2 img { filter: blur(3px) hue-rotate(30deg) brightness(1.1); }
-        .mascot-variant-3 img { filter: blur(3px) hue-rotate(60deg) brightness(0.9); }
-        .mascot-variant-4 img { filter: blur(3px) hue-rotate(90deg) brightness(1.05); }
+        .mascot-variant-1 img { filter: blur(3px) hue-rotate(0deg)   brightness(1);    }
+        .mascot-variant-2 img { filter: blur(3px) hue-rotate(30deg)  brightness(1.1);  }
+        .mascot-variant-3 img { filter: blur(3px) hue-rotate(60deg)  brightness(0.9);  }
+        .mascot-variant-4 img { filter: blur(3px) hue-rotate(90deg)  brightness(1.05); }
         .mascot-variant-5 img { filter: blur(3px) hue-rotate(120deg) brightness(0.95); }
-        .mascot-variant-6 img { filter: blur(3px) hue-rotate(150deg) brightness(1); }
-        .mascot-variant-7 img { filter: blur(3px) hue-rotate(180deg) brightness(1.1); }
-        .mascot-variant-8 img { filter: blur(3px) hue-rotate(210deg) brightness(0.9); }
+        .mascot-variant-6 img { filter: blur(3px) hue-rotate(150deg) brightness(1);    }
+        .mascot-variant-7 img { filter: blur(3px) hue-rotate(180deg) brightness(1.1);  }
+        .mascot-variant-8 img { filter: blur(3px) hue-rotate(210deg) brightness(0.9);  }
 
-        .mascot-float:nth-child(1) {
-            width: 180px;
-            height: 180px;
-            top: 10%;
-            left: 5%;
-            animation-delay: 0s;
-            animation-duration: 25s;
-        }
-
-        .mascot-float:nth-child(2) {
-            width: 140px;
-            height: 140px;
-            top: 60%;
-            left: 80%;
-            animation-delay: 3s;
-            animation-duration: 30s;
-        }
-
-        .mascot-float:nth-child(3) {
-            width: 200px;
-            height: 200px;
-            top: 30%;
-            left: 75%;
-            animation-delay: 6s;
-            animation-duration: 28s;
-        }
-
-        .mascot-float:nth-child(4) {
-            width: 120px;
-            height: 120px;
-            top: 75%;
-            left: 10%;
-            animation-delay: 9s;
-            animation-duration: 22s;
-        }
-
-        .mascot-float:nth-child(5) {
-            width: 160px;
-            height: 160px;
-            top: 50%;
-            left: 50%;
-            animation-delay: 12s;
-            animation-duration: 26s;
-        }
-
-        .mascot-float:nth-child(6) {
-            width: 130px;
-            height: 130px;
-            top: 15%;
-            left: 40%;
-            animation-delay: 2s;
-            animation-duration: 24s;
-        }
-
-        .mascot-float:nth-child(7) {
-            width: 150px;
-            height: 150px;
-            top: 85%;
-            left: 60%;
-            animation-delay: 8s;
-            animation-duration: 27s;
-        }
-
-        .mascot-float:nth-child(8) {
-            width: 170px;
-            height: 170px;
-            top: 40%;
-            left: 15%;
-            animation-delay: 5s;
-            animation-duration: 29s;
-        }
+        .mascot-float:nth-child(1) { width:180px; height:180px; top:10%; left:5%;  animation-delay:0s;  animation-duration:25s; }
+        .mascot-float:nth-child(2) { width:140px; height:140px; top:60%; left:80%; animation-delay:3s;  animation-duration:30s; }
+        .mascot-float:nth-child(3) { width:200px; height:200px; top:30%; left:75%; animation-delay:6s;  animation-duration:28s; }
+        .mascot-float:nth-child(4) { width:120px; height:120px; top:75%; left:10%; animation-delay:9s;  animation-duration:22s; }
+        .mascot-float:nth-child(5) { width:160px; height:160px; top:50%; left:50%; animation-delay:12s; animation-duration:26s; }
+        .mascot-float:nth-child(6) { width:130px; height:130px; top:15%; left:40%; animation-delay:2s;  animation-duration:24s; }
+        .mascot-float:nth-child(7) { width:150px; height:150px; top:85%; left:60%; animation-delay:8s;  animation-duration:27s; }
+        .mascot-float:nth-child(8) { width:170px; height:170px; top:40%; left:15%; animation-delay:5s;  animation-duration:29s; }
 
         @keyframes float {
-            0%, 100% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-            }
-            25% {
-                transform: translate(30px, -40px) rotate(5deg) scale(1.05);
-            }
-            50% {
-                transform: translate(-20px, 30px) rotate(-5deg) scale(0.95);
-            }
-            75% {
-                transform: translate(40px, 20px) rotate(3deg) scale(1.02);
-            }
+            0%,100% { transform: translate(0,0) rotate(0deg) scale(1); }
+            25%      { transform: translate(30px,-40px) rotate(5deg) scale(1.05); }
+            50%      { transform: translate(-20px,30px) rotate(-5deg) scale(0.95); }
+            75%      { transform: translate(40px,20px) rotate(3deg) scale(1.02); }
         }
 
-        /* Overlay léger pour meilleure lisibilité */
         .content-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(0px);
-            z-index: 1;
-            pointer-events: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.75); z-index: 1; pointer-events: none;
         }
 
-        /* Tous les autres éléments au-dessus */
-        .sidebar,
-        .main-content,
-        .mobile-header,
-        .bottom-nav {
+        /* ── Contenu ── */
+        .sb-main-content {
             position: relative;
             z-index: 2;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 256px;
-            height: 100vh;
-            background: #1e3a5f;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            transition: width 0.3s ease;
-            z-index: 40;
-        }
-
-        .sidebar.collapsed {
-            width: 80px;
-        }
-
-        /* Sidebar Header */
-        .sidebar-header {
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            transition: opacity 0.3s;
-        }
-
-        .sidebar.collapsed .sidebar-logo {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: #ff8c42;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            color: white;
-            font-size: 18px;
-        }
-
-        .logo-text {
-            font-size: 14px;
-            font-weight: 800;
-            color: #ff8c42;
-            line-height: 1.2;
-            letter-spacing: -0.5px;
-        }
-
-        .sidebar-toggle {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: transparent;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-
-        .sidebar-toggle:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .sidebar.collapsed .sidebar-toggle {
-            margin: 0 auto;
-        }
-
-        .sidebar-toggle .icon-menu,
-        .sidebar.collapsed .sidebar-toggle .icon-sidebar {
-            display: block;
-        }
-
-        .sidebar-toggle .icon-sidebar,
-        .sidebar.collapsed .sidebar-toggle .icon-menu {
-            display: none;
-        }
-
-        /* Sidebar Navigation */
-        .sidebar-nav {
-            flex: 1;
-            padding: 24px 12px;
-            overflow-y: auto;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            margin-bottom: 4px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-        }
-
-        .nav-item.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .nav-item.active .nav-icon {
-            color: #ff8c42;
-        }
-
-        .nav-icon {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-
-        .nav-label {
-            white-space: nowrap;
-            transition: opacity 0.3s;
-        }
-
-        .sidebar.collapsed .nav-label {
-            opacity: 0;
-            width: 0;
-            overflow: hidden;
-        }
-
-        .sidebar.collapsed .nav-item {
-            justify-content: center;
-        }
-
-        /* Tooltip for collapsed state */
-        .nav-item::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            left: 100%;
-            margin-left: 8px;
-            padding: 6px 12px;
-            background: #1f2937;
-            color: white;
-            font-size: 12px;
-            border-radius: 8px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s;
-            z-index: 50;
-        }
-
-        .sidebar.collapsed .nav-item:hover::after {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Sidebar User */
-        .sidebar-user {
-            padding: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff8c42, #ff6b35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .user-details {
-            flex: 1;
-            min-width: 0;
-            transition: opacity 0.3s;
-        }
-
-        .sidebar.collapsed .user-details {
-            opacity: 0;
-            width: 0;
-            overflow: hidden;
-        }
-
-        .user-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: white;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .user-email {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .logout-btn {
-            display: block;
-            width: 100%;
-            padding: 8px;
-            text-align: center;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .logout-btn:hover {
-            color: white;
-        }
-
-        .sidebar.collapsed .logout-btn {
-            opacity: 0;
-            height: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 256px;
-            transition: margin-left 0.3s ease;
             min-height: 100vh;
         }
 
-        .sidebar.collapsed ~ .main-content {
-            margin-left: 80px;
-        }
-
-        /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 3rem 2rem;
         }
 
-        /* Header */
-        .page-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
+        /* ── Header ── */
+        .page-header { text-align: center; margin-bottom: 4rem; }
 
         .mascot-img {
-            width: 200px;
-            height: auto;
-            margin: 0 auto 2rem;
-            display: block;
-            filter: drop-shadow(0 8px 20px rgba(210, 122, 45, 0.3));
+            width: 200px; height: auto;
+            margin: 0 auto 2rem; display: block;
+            filter: drop-shadow(0 8px 20px rgba(210,122,45,0.3));
         }
 
-        .page-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            color: #172E42;
-        }
+        .page-title           { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; color: #172E42; }
+        .page-title-highlight { color: #D27A2D; }
+        .page-subtitle        { color: #2A262A; font-size: 1.2rem; line-height: 1.5; opacity: 0.8; font-weight: 600; }
 
-        .page-title-highlight {
-            color: #D27A2D;
-        }
-
-        .page-subtitle {
-            color: #2A262A;
-            font-size: 1.2rem;
-            line-height: 1.5;
-            opacity: 0.8;
-            font-weight: 600;
-        }
-
-        /* Cards Grid */
+        /* ── Cards ── */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -480,418 +100,92 @@
         }
 
         .bail-card {
-            background: #FFFFFF;
-            border: 3px solid #172E42;
-            border-radius: 16px;
-            padding: 2rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #FFFFFF; border: 3px solid #172E42; border-radius: 16px;
+            padding: 2rem; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
             position: relative;
         }
-
-        .bail-card:hover {
-            border-color: #D27A2D;
-            transform: translateY(-4px);
-            background: #d27a2d26;
-        }
-
-        .bail-card.selected {
-            border-color: #D27A2D;
-            background: #d27a2d26;
-        }
+        .bail-card:hover  { border-color: #D27A2D; transform: translateY(-4px); background: #d27a2d26; }
+        .bail-card.selected{ border-color: #D27A2D; background: #d27a2d26; }
 
         .card-radio {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 3px solid #172E42;
-            background: transparent;
-            transition: all 0.3s;
+            position: absolute; top: 1.5rem; right: 1.5rem;
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 3px solid #172E42; background: transparent; transition: all 0.3s;
         }
+        .bail-card:hover   .card-radio { border-color: #D27A2D; }
+        .bail-card.selected .card-radio { border-color: #D27A2D; background: #D27A2D; box-shadow: inset 0 0 0 5px #FFFFFF; }
 
-        .bail-card:hover .card-radio {
-            border-color: #D27A2D;
-        }
+        .card-title       { font-size: 1.5rem; font-weight: 800; color: #172E42; margin-bottom: 1rem; padding-right: 3rem; }
+        .card-description { color: #2A262A; font-size: 1rem; line-height: 1.6; opacity: 0.85; }
 
-        .bail-card.selected .card-radio {
-            border-color: #D27A2D;
-            background: #D27A2D;
-            box-shadow: inset 0 0 0 5px #FFFFFF;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #172E42;
-            margin-bottom: 1rem;
-            padding-right: 3rem;
-        }
-
-        .card-description {
-            color: #2A262A;
-            font-size: 1rem;
-            line-height: 1.6;
-            opacity: 0.85;
-        }
-
-        /* Actions */
+        /* ── Actions ── */
         .page-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 2px solid rgba(23, 46, 66, 0.1);
+            display: flex; gap: 1rem; justify-content: center;
+            margin-top: 3rem; padding-top: 2rem;
+            border-top: 2px solid rgba(23,46,66,0.1);
         }
 
         .btn {
-            padding: 1rem 2.5rem;
-            border-radius: 12px;
-            border: none;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Nunito', sans-serif;
-            min-width: 200px;
+            padding: 1rem 2.5rem; border-radius: 12px; border: none;
+            font-size: 1.1rem; font-weight: 700; cursor: pointer;
+            transition: all 0.3s; font-family: 'Nunito', sans-serif; min-width: 200px;
         }
+        .btn-primary { background: linear-gradient(135deg,#D27A2D,#E89347); color: #FFFFFF; box-shadow: 0 4px 15px rgba(210,122,45,0.4); }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(210,122,45,0.6); }
+        .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #D27A2D 0%, #E89347 100%);
-            color: #FFFFFF;
-            box-shadow: 0 4px 15px rgba(210, 122, 45, 0.4);
-        }
+        /* ── Loading ── */
+        .loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem; grid-column: 1/-1; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #E5E7EB; border-top-color: #D27A2D; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { color: #6B7280; font-size: 1rem; font-weight: 600; }
 
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(210, 122, 45, 0.6);
-        }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
 
-        .btn-primary:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Loading */
-        .loading-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 4rem;
-            grid-column: 1 / -1;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #E5E7EB;
-            border-top-color: #D27A2D;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: #6B7280;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        /* Hide mobile elements by default */
-        .mobile-header {
-            display: none;
-        }
-
-        .mobile-overlay {
-            display: none;
-        }
-
-        .bottom-nav {
-            display: none;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                width: 256px !important;
-            }
-
-            .sidebar.mobile-open {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0 !important;
-                padding-bottom: 80px; /* Space for bottom nav */
-            }
-
-            .mobile-header {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 1rem;
-                background: #1e3a5f;
-                position: sticky;
-                top: 0;
-                z-index: 30;
-            }
-
-            .mobile-menu-btn {
-                width: 40px;
-                height: 40px;
-                border: none;
-                background: transparent;
-                color: white;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .mobile-logo {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                text-decoration: none;
-            }
-
-            .mobile-overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 35;
-            }
-
-            .mobile-overlay.active {
-                display: block;
-            }
-
-            .mobile-header {
-                display: flex !important;
-            }
-
-            .bottom-nav {
-                display: flex !important;
-            }
-
-            /* Bottom Navigation */
-            .bottom-nav {
-                display: flex;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: #1e3a5f;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-                z-index: 50;
-                height: 64px;
-            }
-
-            .bottom-nav-item {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                color: rgba(255, 255, 255, 0.5);
-                text-decoration: none;
-                font-size: 12px;
-                font-weight: 600;
-                gap: 4px;
-                transition: all 0.2s;
-            }
-
-            .bottom-nav-item.active {
-                color: #ff8c42;
-            }
-
-            .bottom-nav-item:hover {
-                color: rgba(255, 255, 255, 0.7);
-            }
-
-            .bottom-nav-item.active:hover {
-                color: #ff8c42;
-            }
-
-            .bottom-nav-icon {
-                width: 24px;
-                height: 24px;
-            }
-        }
-
-        @media (min-width: 1025px) {
-            .mobile-header {
-                display: none;
-            }
-
-            .bottom-nav {
-                display: none;
-            }
-        }
-
+        /* ── Responsive ── */
         @media (max-width: 640px) {
-            .page-title {
-                font-size: 2rem;
-            }
-
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .container {
-                padding: 2rem 1rem;
-            }
-
-            /* Mascottes flottantes plus petites sur mobile */
-            .mascot-float:nth-child(1) { width: 100px; height: 100px; }
-            .mascot-float:nth-child(2) { width: 80px; height: 80px; }
-            .mascot-float:nth-child(3) { width: 120px; height: 120px; }
-            .mascot-float:nth-child(4) { width: 70px; height: 70px; }
-            .mascot-float:nth-child(5) { width: 90px; height: 90px; }
-            .mascot-float:nth-child(6) { width: 75px; height: 75px; }
-            .mascot-float:nth-child(7) { width: 85px; height: 85px; }
-            .mascot-float:nth-child(8) { width: 95px; height: 95px; }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.4s ease-out;
+            .page-title  { font-size: 2rem; }
+            .cards-grid  { grid-template-columns: 1fr; }
+            .container   { padding: 2rem 1rem; }
+            .mascot-float:nth-child(1) { width:100px; height:100px; }
+            .mascot-float:nth-child(2) { width:80px;  height:80px;  }
+            .mascot-float:nth-child(3) { width:120px; height:120px; }
+            .mascot-float:nth-child(4) { width:70px;  height:70px;  }
+            .mascot-float:nth-child(5) { width:90px;  height:90px;  }
+            .mascot-float:nth-child(6) { width:75px;  height:75px;  }
+            .mascot-float:nth-child(7) { width:85px;  height:85px;  }
+            .mascot-float:nth-child(8) { width:95px;  height:95px;  }
         }
     </style>
 </head>
 <body>
 
-    <!-- Background animé avec mascottes -->
+    <!-- Background animé -->
     <div class="animated-background">
-        <!-- Mascottes flottantes avec variations -->
-        <div class="mascot-float mascot-variant-1"><img src="mascotte/no_bg/coach.png" alt=""></div>
-        <div class="mascot-float mascot-variant-2"><img src="mascotte/no_bg/joyeux.png" alt=""></div>
-        <div class="mascot-float mascot-variant-3"><img src="mascotte/no_bg/applaudit.png" alt=""></div>
-        <div class="mascot-float mascot-variant-4"><img src="mascotte/no_bg/joyeux.png" alt=""></div>
-        <div class="mascot-float mascot-variant-5"><img src="mascotte/no_bg/bravo.png" alt=""></div>
-        <div class="mascot-float mascot-variant-6"><img src="mascotte/no_bg/mascotte.png" alt=""></div>
+        <div class="mascot-float mascot-variant-1"><img src="mascotte/no_bg/coach.png"       alt=""></div>
+        <div class="mascot-float mascot-variant-2"><img src="mascotte/no_bg/joyeux.png"      alt=""></div>
+        <div class="mascot-float mascot-variant-3"><img src="mascotte/no_bg/applaudit.png"   alt=""></div>
+        <div class="mascot-float mascot-variant-4"><img src="mascotte/no_bg/joyeux.png"      alt=""></div>
+        <div class="mascot-float mascot-variant-5"><img src="mascotte/no_bg/bravo.png"       alt=""></div>
+        <div class="mascot-float mascot-variant-6"><img src="mascotte/no_bg/mascotte.png"    alt=""></div>
         <div class="mascot-float mascot-variant-7"><img src="mascotte/no_bg/faire_choix.png" alt=""></div>
-        <div class="mascot-float mascot-variant-8"><img src="mascotte/no_bg/gene.png" alt=""></div>
+        <div class="mascot-float mascot-variant-8"><img src="mascotte/no_bg/gene.png"        alt=""></div>
     </div>
-
-    <!-- Overlay pour meilleure lisibilité -->
     <div class="content-overlay"></div>
 
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <!-- Sidebar Header -->
-        <div class="sidebar-header">
-            <a href="/dashboard" class="sidebar-logo">
-                <div class="logo-icon">5</div>
-                <div class="logo-text">5 SECONDES<br/>CHRONO</div>
-            </a>
-            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
-                <svg class="icon-menu" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                <svg class="icon-sidebar" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
-                    <rect x="3" y="3" width="7" height="18" rx="1" stroke-width="2"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 6h6M14 12h6M14 18h6" />
-                </svg>
-            </button>
-        </div>
+    <!-- La sidebar sera injectée ici par sidebar.js -->
 
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar-nav">
-            <a href="/dashboard" class="nav-item" data-tooltip="Mon cours">
-                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                </svg>
-                <span class="nav-label">Mon cours</span>
-            </a>
-            <a href="/quiz" class="nav-item active" data-tooltip="Quiz">
-                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
-                </svg>
-                <span class="nav-label">Quiz</span>
-            </a>
-        </nav>
-
-        <!-- Sidebar User -->
-        <div class="sidebar-user">
-            <div class="user-info">
-                <div class="user-avatar">U</div>
-                <div class="user-details">
-                    <div class="user-name">Utilisateur</div>
-                    <div class="user-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8afff9eff8caeff2ebe7fae6efa4e9e5e7">[email&#160;protected]</a></div>
-                </div>
-            </div>
-            <a href="/auth/logout" class="logout-btn">Déconnexion</a>
-        </div>
-    </aside>
-
-    <!-- Mobile Header -->
-    <header class="mobile-header">
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
-        <a href="/dashboard" class="mobile-logo">
-            <div class="logo-icon">5</div>
-            <span class="logo-text">5 SECONDES CHRONO</span>
-        </a>
-        <div style="width: 40px;"></div>
-    </header>
-
-    <!-- Mobile Overlay -->
-    <div class="mobile-overlay" id="mobileOverlay"></div>
-
-    <!-- Bottom Navigation (Mobile) -->
-    <nav class="bottom-nav">
-        <a href="/dashboard" class="bottom-nav-item">
-            <svg class="bottom-nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-            </svg>
-            <span>Mon cours</span>
-        </a>
-        <a href="/quiz" class="bottom-nav-item active">
-            <svg class="bottom-nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
-            </svg>
-            <span>Quiz</span>
-        </a>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="main-content">
+    <div class="sb-main-content">
         <div class="container fade-in">
-            <!-- Page Header -->
+
             <div class="page-header">
                 <img src="mascotte/no_bg/joyeux.png" alt="Mascotte" class="mascot-img">
-                <h1 class="page-title">
-                    Choisis ton <span class="page-title-highlight">type de bail</span>
-                </h1>
+                <h1 class="page-title">Choisis ton <span class="page-title-highlight">type de bail</span></h1>
                 <p class="page-subtitle">Sélectionne le type de bail que tu souhaites réviser</p>
             </div>
 
-            <!-- Bails Grid -->
             <div class="cards-grid" id="bailsGrid">
                 <div class="loading-state">
                     <div class="spinner"></div>
@@ -899,174 +193,69 @@
                 </div>
             </div>
 
-            <!-- Actions -->
             <div class="page-actions">
                 <button class="btn btn-primary" id="startQuizBtn" onclick="startQuiz()" disabled>
                     Commencer le Quiz
                 </button>
             </div>
+
         </div>
-    </main>
+    </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Configuration
-        const API_BASE_URL = '/api';
+    <!-- Sidebar chargée en dernier -->
+    <script src="sidebar.js"></script>
 
-        // État
+    <script>
         let typeBails = [];
         let selectedTypeBail = null;
 
-        // Sidebar toggle
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileOverlay = document.getElementById('mobileOverlay');
+        document.addEventListener('DOMContentLoaded', loadTypeBails);
 
-        sidebarToggle?.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-        });
-
-        mobileMenuBtn?.addEventListener('click', () => {
-            sidebar.classList.add('mobile-open');
-            mobileOverlay.classList.add('active');
-        });
-
-        mobileOverlay?.addEventListener('click', () => {
-            sidebar.classList.remove('mobile-open');
-            mobileOverlay.classList.remove('active');
-        });
-
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', function() {
-            // Auto-close sidebar on page load
-            if (sidebar) {
-                sidebar.classList.add('collapsed');
-            }
-            
-            loadTypeBails();
-        });
-
-        // Charger les types de bail
         async function loadTypeBails() {
             const grid = document.getElementById('bailsGrid');
-            
             try {
-                // SIMULATION - En production, utiliser l'API:
-                // const response = await fetch(`${API_BASE_URL}/type-bails`);
-                // typeBails = await response.json();
-                
-                await new Promise(resolve => setTimeout(resolve, 600));
+                await new Promise(r => setTimeout(r, 600));
                 typeBails = [
-                    {
-                        id: 1,
-                        name: "Bail Commercial",
-                        description: "Pour les locaux utilisés pour une activité commerciale, industrielle ou artisanale"
-                    },
-                    {
-                        id: 2,
-                        name: "Bail Professionnel",
-                        description: "Pour l'exercice d'une profession libérale réglementée"
-                    },
-                    {
-                        id: 3,
-                        name: "Bail Dérogatoire",
-                        description: "Bail de courte durée sans statut des baux commerciaux"
-                    },
-                    {
-                        id: 4,
-                        name: "Bail d'Habitation",
-                        description: "Pour la location d'un logement à usage d'habitation principale"
-                    }
+                    { id:1, name:"Bail Commercial",    description:"Pour les locaux utilisés pour une activité commerciale, industrielle ou artisanale" },
+                    { id:2, name:"Bail Professionnel", description:"Pour l'exercice d'une profession libérale réglementée" },
+                    { id:3, name:"Bail Dérogatoire",   description:"Bail de courte durée sans statut des baux commerciaux" },
+                    { id:4, name:"Bail d'Habitation",  description:"Pour la location d'un logement à usage d'habitation principale" }
                 ];
-                
                 grid.innerHTML = '';
-                typeBails.forEach(bail => {
-                    const card = createBailCard(bail);
-                    grid.appendChild(card);
-                });
-                
-            } catch (error) {
-                console.error('Erreur:', error);
-                grid.innerHTML = '<div class="loading-state"><p style="color: #EF4444; font-weight: 600;">Erreur de chargement. Veuillez réessayer.</p></div>';
+                typeBails.forEach(bail => grid.appendChild(createBailCard(bail)));
+            } catch (e) {
+                grid.innerHTML = '<div class="loading-state"><p style="color:#EF4444;font-weight:600;">Erreur de chargement. Veuillez réessayer.</p></div>';
             }
         }
 
-        // Créer une carte de type de bail
         function createBailCard(bail) {
             const card = document.createElement('div');
             card.className = 'bail-card';
-            card.innerHTML = `
-                <div class="card-radio"></div>
-                <div class="card-title">${bail.name}</div>
-                <div class="card-description">${bail.description}</div>
-            `;
-            
+            card.innerHTML = `<div class="card-radio"></div><div class="card-title">${bail.name}</div><div class="card-description">${bail.description}</div>`;
             card.onclick = () => selectBail(bail, card);
             return card;
         }
 
-        // Sélectionner un type de bail
         function selectBail(bail, cardElement) {
-            // Désélectionner les autres
-            document.querySelectorAll('.bail-card').forEach(c => {
-                c.classList.remove('selected');
-            });
-            
+            document.querySelectorAll('.bail-card').forEach(c => c.classList.remove('selected'));
             cardElement.classList.add('selected');
             selectedTypeBail = bail;
-            
-            // Activer le bouton
             document.getElementById('startQuizBtn').disabled = false;
         }
 
-        // Démarrer le quiz
         async function startQuiz() {
-            if (!selectedTypeBail) {
-                alert('Veuillez sélectionner un type de bail');
-                return;
-            }
-            
-            const startBtn = document.getElementById('startQuizBtn');
-            startBtn.disabled = true;
-            startBtn.textContent = 'Création de la session...';
-            
+            if (!selectedTypeBail) { alert('Veuillez sélectionner un type de bail'); return; }
+            const btn = document.getElementById('startQuizBtn');
+            btn.disabled = true; btn.textContent = 'Création de la session...';
             try {
-                const sessionData = {
-                    typeBailId: selectedTypeBail.id,
-                    typeBailName: selectedTypeBail.name
-                };
-                
-                // SIMULATION - En production, utiliser l'API:
-                // const response = await fetch(`${API_BASE_URL}/quiz/start-session`, {
-                //     method: 'POST',
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //         'Authorization': `Bearer ${getAuthToken()}`
-                //     },
-                //     body: JSON.stringify(sessionData)
-                // });
-                // const session = await response.json();
-                
-                await new Promise(resolve => setTimeout(resolve, 800));
-                const session = {
-                    sessionId: 'session_' + Date.now(),
-                    typeBail: selectedTypeBail,
-                    startTime: new Date().toISOString()
-                };
-                
+                await new Promise(r => setTimeout(r, 800));
+                const session = { sessionId:'session_'+Date.now(), typeBail:selectedTypeBail, startTime:new Date().toISOString() };
                 localStorage.setItem('currentSession', JSON.stringify(session));
                 window.location.href = `2-quiz.html?sessionId=${session.sessionId}`;
-                
-            } catch (error) {
-                console.error('Erreur:', error);
+            } catch (e) {
                 alert('Une erreur est survenue. Veuillez réessayer.');
-                startBtn.disabled =false;
-                startBtn.textContent = 'Commencer le Quiz';
+                btn.disabled = false; btn.textContent = 'Commencer le Quiz';
             }
-        }
-
-        function getAuthToken() {
-            return localStorage.getItem('authToken') || '';
         }
     </script>
 

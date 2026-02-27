@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5 Secondes Chrono - Quiz</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Sidebar partagée -->
+    <link rel="stylesheet" href="sidebar.css">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Nunito', sans-serif;
@@ -22,13 +22,11 @@
             overflow-x: hidden;
         }
 
-        /* Background animé avec mascottes */
+        /* ── Background animé ── */
         .animated-background {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: 0;
             background: #d27a2d96;
             overflow: hidden;
@@ -41,394 +39,52 @@
             pointer-events: none;
         }
 
-        .mascot-float img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+        .mascot-float img { width: 100%; height: 100%; object-fit: contain; }
 
-        /* Variations de couleur pour chaque mascotte */
-        .mascot-variant-1 img { filter: blur(3px) hue-rotate(0deg) brightness(1); }
-        .mascot-variant-2 img { filter: blur(3px) hue-rotate(30deg) brightness(1.1); }
-        .mascot-variant-3 img { filter: blur(3px) hue-rotate(60deg) brightness(0.9); }
-        .mascot-variant-4 img { filter: blur(3px) hue-rotate(90deg) brightness(1.05); }
+        .mascot-variant-1 img { filter: blur(3px) hue-rotate(0deg)   brightness(1);    }
+        .mascot-variant-2 img { filter: blur(3px) hue-rotate(30deg)  brightness(1.1);  }
+        .mascot-variant-3 img { filter: blur(3px) hue-rotate(60deg)  brightness(0.9);  }
+        .mascot-variant-4 img { filter: blur(3px) hue-rotate(90deg)  brightness(1.05); }
         .mascot-variant-5 img { filter: blur(3px) hue-rotate(120deg) brightness(0.95); }
-        .mascot-variant-6 img { filter: blur(3px) hue-rotate(150deg) brightness(1); }
-        .mascot-variant-7 img { filter: blur(3px) hue-rotate(180deg) brightness(1.1); }
-        .mascot-variant-8 img { filter: blur(3px) hue-rotate(210deg) brightness(0.9); }
+        .mascot-variant-6 img { filter: blur(3px) hue-rotate(150deg) brightness(1);    }
+        .mascot-variant-7 img { filter: blur(3px) hue-rotate(180deg) brightness(1.1);  }
+        .mascot-variant-8 img { filter: blur(3px) hue-rotate(210deg) brightness(0.9);  }
 
-        .mascot-float:nth-child(1) {
-            width: 180px;
-            height: 180px;
-            top: 10%;
-            left: 5%;
-            animation-delay: 0s;
-            animation-duration: 25s;
-        }
-
-        .mascot-float:nth-child(2) {
-            width: 140px;
-            height: 140px;
-            top: 60%;
-            left: 80%;
-            animation-delay: 3s;
-            animation-duration: 30s;
-        }
-
-        .mascot-float:nth-child(3) {
-            width: 200px;
-            height: 200px;
-            top: 30%;
-            left: 75%;
-            animation-delay: 6s;
-            animation-duration: 28s;
-        }
-
-        .mascot-float:nth-child(4) {
-            width: 120px;
-            height: 120px;
-            top: 75%;
-            left: 10%;
-            animation-delay: 9s;
-            animation-duration: 22s;
-        }
-
-        .mascot-float:nth-child(5) {
-            width: 160px;
-            height: 160px;
-            top: 50%;
-            left: 50%;
-            animation-delay: 12s;
-            animation-duration: 26s;
-        }
-
-        .mascot-float:nth-child(6) {
-            width: 130px;
-            height: 130px;
-            top: 15%;
-            left: 40%;
-            animation-delay: 2s;
-            animation-duration: 24s;
-        }
-
-        .mascot-float:nth-child(7) {
-            width: 150px;
-            height: 150px;
-            top: 85%;
-            left: 60%;
-            animation-delay: 8s;
-            animation-duration: 27s;
-        }
-
-        .mascot-float:nth-child(8) {
-            width: 170px;
-            height: 170px;
-            top: 40%;
-            left: 15%;
-            animation-delay: 5s;
-            animation-duration: 29s;
-        }
+        .mascot-float:nth-child(1) { width:180px; height:180px; top:10%; left:5%;  animation-delay:0s;  animation-duration:25s; }
+        .mascot-float:nth-child(2) { width:140px; height:140px; top:60%; left:80%; animation-delay:3s;  animation-duration:30s; }
+        .mascot-float:nth-child(3) { width:200px; height:200px; top:30%; left:75%; animation-delay:6s;  animation-duration:28s; }
+        .mascot-float:nth-child(4) { width:120px; height:120px; top:75%; left:10%; animation-delay:9s;  animation-duration:22s; }
+        .mascot-float:nth-child(5) { width:160px; height:160px; top:50%; left:50%; animation-delay:12s; animation-duration:26s; }
+        .mascot-float:nth-child(6) { width:130px; height:130px; top:15%; left:40%; animation-delay:2s;  animation-duration:24s; }
+        .mascot-float:nth-child(7) { width:150px; height:150px; top:85%; left:60%; animation-delay:8s;  animation-duration:27s; }
+        .mascot-float:nth-child(8) { width:170px; height:170px; top:40%; left:15%; animation-delay:5s;  animation-duration:29s; }
 
         @keyframes float {
-            0%, 100% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-            }
-            25% {
-                transform: translate(30px, -40px) rotate(5deg) scale(1.05);
-            }
-            50% {
-                transform: translate(-20px, 30px) rotate(-5deg) scale(0.95);
-            }
-            75% {
-                transform: translate(40px, 20px) rotate(3deg) scale(1.02);
-            }
+            0%,100% { transform: translate(0,0) rotate(0deg) scale(1); }
+            25%      { transform: translate(30px,-40px) rotate(5deg) scale(1.05); }
+            50%      { transform: translate(-20px,30px) rotate(-5deg) scale(0.95); }
+            75%      { transform: translate(40px,20px) rotate(3deg) scale(1.02); }
         }
 
-        /* Overlay léger pour meilleure lisibilité */
         .content-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(0px);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.75);
             z-index: 1;
             pointer-events: none;
         }
 
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 80px;
-            height: 100vh;
-            background: #1e3a5f;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            transition: width 0.3s ease;
-            z-index: 40;
-        }
-
-        .sidebar.expanded {
-            width: 256px;
-        }
-
-        .sidebar-header {
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar-logo {
-            display: none;
-        }
-
-        .sidebar.expanded .sidebar-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: #ff8c42;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            color: white;
-            font-size: 18px;
-        }
-
-        .logo-text {
-            font-size: 14px;
-            font-weight: 800;
-            color: #ff8c42;
-            line-height: 1.2;
-            letter-spacing: -0.5px;
-        }
-
-        .sidebar-toggle {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: transparent;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-
-        .sidebar-toggle:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .sidebar-toggle .icon-sidebar,
-        .sidebar.expanded .sidebar-toggle .icon-menu {
-            display: block;
-        }
-
-        .sidebar-toggle .icon-menu,
-        .sidebar.expanded .sidebar-toggle .icon-sidebar {
-            display: none;
-        }
-
-        .sidebar-nav {
+        /* ── Contenu principal ── */
+        /* sb-main-content vient de sidebar.css — on surcharge juste display */
+        .sb-main-content {
             flex: 1;
-            padding: 24px 12px;
-            overflow-y: auto;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            margin-bottom: 4px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s;
-            position: relative;
-            justify-content: center;
-        }
-
-        .sidebar.expanded .nav-item {
-            justify-content: flex-start;
-        }
-
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-        }
-
-        .nav-item.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .nav-item.active .nav-icon {
-            color: #ff8c42;
-        }
-
-        .nav-icon {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-
-        .nav-label {
-            white-space: nowrap;
-            opacity: 0;
-            width: 0;
-            overflow: hidden;
-            transition: opacity 0.3s;
-        }
-
-        .sidebar.expanded .nav-label {
-            opacity: 1;
-            width: auto;
-        }
-
-        .nav-item::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            left: 100%;
-            margin-left: 8px;
-            padding: 6px 12px;
-            background: #1f2937;
-            color: white;
-            font-size: 12px;
-            border-radius: 8px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s;
-            z-index: 50;
-        }
-
-        .sidebar:not(.expanded) .nav-item:hover::after {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .sidebar-user {
-            padding: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-            justify-content: center;
-        }
-
-        .sidebar.expanded .user-info {
-            justify-content: flex-start;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff8c42, #ff6b35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .user-details {
-            flex: 1;
-            min-width: 0;
-            opacity: 0;
-            width: 0;
-            overflow: hidden;
-            transition: opacity 0.3s;
-        }
-
-        .sidebar.expanded .user-details {
-            opacity: 1;
-            width: auto;
-        }
-
-        .user-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: white;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .user-email {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .logout-btn {
-            display: block;
-            width: 100%;
-            padding: 8px;
-            text-align: center;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            transition: all 0.2s;
-            opacity: 0;
-            height: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        .sidebar.expanded .logout-btn {
-            opacity: 1;
-            height: auto;
-            padding: 8px;
-        }
-
-        .logout-btn:hover {
-            color: white;
-        }
-
-        /* Main wrapper */
-        .main-wrapper {
-            flex: 1;
-            margin-left: 80px;
-            transition: margin-left 0.3s ease;
             display: flex;
             flex-direction: column;
             position: relative;
             z-index: 2;
         }
 
-        .sidebar.expanded ~ .main-wrapper {
-            margin-left: 256px;
-        }
-
-        /* Tous les autres éléments au-dessus */
         .header,
         .container,
         .side-mascot,
@@ -438,12 +94,12 @@
             z-index: 2;
         }
 
-        /* Header compact */
+        /* ── Header ── */
         .header {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.95);
             padding: 1rem 1.5rem;
-            border-bottom: 2px solid rgba(210, 122, 45, 0.2);
-            box-shadow: 0 2px 8px rgba(23, 46, 66, 0.08);
+            border-bottom: 2px solid rgba(210,122,45,0.2);
+            box-shadow: 0 2px 8px rgba(23,46,66,0.08);
             backdrop-filter: blur(10px);
         }
 
@@ -457,90 +113,52 @@
         }
 
         .close-btn {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
+            width: 40px; height: 40px; min-width: 40px;
             border-radius: 50%;
             background: #FEE2E2;
             border: 2px solid #DC2626;
             color: #DC2626;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             font-size: 1.3rem;
             transition: all 0.3s ease;
             font-weight: 700;
         }
 
         .close-btn:hover {
-            background: #DC2626;
-            color: #FFFFFF;
+            background: #DC2626; color: #FFFFFF;
             transform: rotate(90deg) scale(1.1);
         }
 
-        .progress-container {
-            flex: 1;
-        }
-
+        .progress-container { flex: 1; }
         .progress-label {
-            font-size: 0.7rem;
-            color: #172E42;
+            font-size: 0.7rem; color: #172E42;
             margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
         }
 
         .progress-bar {
             height: 10px;
-            background: rgba(210, 122, 45, 0.15);
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid rgba(210, 122, 45, 0.3);
+            background: rgba(210,122,45,0.15);
+            border-radius: 10px; overflow: hidden;
+            border: 2px solid rgba(210,122,45,0.3);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #D27A2D 0%, #F59E0B 100%);
+            background: linear-gradient(90deg,#D27A2D 0%,#F59E0B 100%);
             transition: width 0.4s ease;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(210, 122, 45, 0.4);
+            box-shadow: 0 2px 8px rgba(210,122,45,0.4);
         }
 
-        .lives-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        .lives-container { display:flex; flex-direction:column; align-items:center; gap:0.5rem; }
+        .lives-label { font-size:0.7rem; color:#172E42; text-transform:uppercase; letter-spacing:1px; font-weight:700; }
+        .lives { display:flex; gap:0.4rem; }
+        .heart-icon { width:22px; height:22px; transition:all 0.3s; filter:drop-shadow(0 2px 4px rgba(220,38,38,0.3)); }
+        .heart-icon.lost { opacity:0.15; filter:grayscale(1); }
 
-        .lives-label {
-            font-size: 0.7rem;
-            color: #172E42;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-        }
-
-        .lives {
-            display: flex;
-            gap: 0.4rem;
-        }
-
-        .heart-icon {
-            width: 22px;
-            height: 22px;
-            transition: all 0.3s;
-            filter: drop-shadow(0 2px 4px rgba(220, 38, 38, 0.3));
-        }
-
-        .heart-icon.lost {
-            opacity: 0.15;
-            filter: grayscale(1);
-        }
-
-        /* Container principal */
+        /* ── Container ── */
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -550,767 +168,214 @@
             flex-direction: column;
         }
 
-        /* Timer compact */
-        .timer-section {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
+        /* ── Timer ── */
+        .timer-section { text-align:center; margin-bottom:2rem; }
         .timer-circle {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto;
-            position: relative;
-            filter: drop-shadow(0 4px 12px rgba(210, 122, 45, 0.25));
+            width:120px; height:120px;
+            margin:0 auto; position:relative;
+            filter:drop-shadow(0 4px 12px rgba(210,122,45,0.25));
         }
-
-        .timer-svg {
-            transform: rotate(-90deg);
-        }
-
-        .timer-circle-bg {
-            fill: none;
-            stroke: rgba(210, 122, 45, 0.15);
-            stroke-width: 8;
-        }
-
-        .timer-circle-progress {
-            fill: none;
-            stroke: #D27A2D;
-            stroke-width: 8;
-            stroke-linecap: round;
-            transition: stroke-dashoffset 0.1s linear;
-        }
-
-        .timer-circle-progress.warning {
-            stroke: #F59E0B;
-        }
-
-        .timer-circle-progress.danger {
-            stroke: #DC2626;
-            animation: timerPulse 0.5s infinite;
-        }
+        .timer-svg { transform:rotate(-90deg); }
+        .timer-circle-bg      { fill:none; stroke:rgba(210,122,45,0.15); stroke-width:8; }
+        .timer-circle-progress { fill:none; stroke:#D27A2D; stroke-width:8; stroke-linecap:round; transition:stroke-dashoffset 0.1s linear; }
+        .timer-circle-progress.warning { stroke:#F59E0B; }
+        .timer-circle-progress.danger  { stroke:#DC2626; animation:timerPulse 0.5s infinite; }
 
         @keyframes timerPulse {
-            0%, 100% { 
-                opacity: 1;
-                filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.6));
-            }
-            50% { 
-                opacity: 0.7;
-                filter: drop-shadow(0 0 16px rgba(220, 38, 38, 0.9));
-            }
+            0%,100% { opacity:1;   filter:drop-shadow(0 0 8px rgba(220,38,38,0.6)); }
+            50%     { opacity:0.7; filter:drop-shadow(0 0 16px rgba(220,38,38,0.9)); }
         }
 
         .timer-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #D27A2D;
+            position:absolute; top:50%; left:50%;
+            transform:translate(-50%,-50%);
+            font-size:2.5rem; font-weight:900; color:#D27A2D;
         }
+        .timer-text.warning { color:#F59E0B; }
+        .timer-text.danger  { color:#DC2626; }
+        .timer-label { margin-top:0.75rem; color:#172E42; font-size:0.8rem; text-transform:uppercase; letter-spacing:2px; font-weight:800; }
 
-        .timer-text.warning {
-            color: #F59E0B;
-        }
-
-        .timer-text.danger {
-            color: #DC2626;
-        }
-
-        .timer-label {
-            margin-top: 0.75rem;
-            color: #172E42;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 800;
-        }
-
-        /* Badge catégorie */
+        /* ── Badge ── */
         .question-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            background: linear-gradient(135deg, #D27A2D 0%, #F59E0B 100%);
-            color: #FFFFFF;
-            padding: 0.6rem 1.5rem;
-            border-radius: 25px;
-            margin-bottom: 1.5rem;
-            font-size: 0.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 12px rgba(210, 122, 45, 0.3);
+            display:inline-flex; align-items:center; gap:0.6rem;
+            background:linear-gradient(135deg,#D27A2D 0%,#F59E0B 100%);
+            color:#FFFFFF; padding:0.6rem 1.5rem; border-radius:25px;
+            margin-bottom:1.5rem; font-size:0.8rem; font-weight:800;
+            text-transform:uppercase; letter-spacing:1px;
+            box-shadow:0 4px 12px rgba(210,122,45,0.3);
         }
+        .question-badge-icon { width:16px; height:16px; }
 
-        .question-badge-icon {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* Question */
+        /* ── Question ── */
         .question-container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border-radius: 20px;
-            border: 3px solid rgba(210, 122, 45, 0.2);
-            box-shadow: 0 8px 24px rgba(23, 46, 66, 0.08);
-            backdrop-filter: blur(10px);
+            background:rgba(255,255,255,0.95);
+            padding:2rem; margin-bottom:2rem;
+            border-radius:20px; border:3px solid rgba(210,122,45,0.2);
+            box-shadow:0 8px 24px rgba(23,46,66,0.08);
+            backdrop-filter:blur(10px);
         }
+        .question-text { font-size:1.2rem; font-weight:700; line-height:1.6; text-align:center; color:#172E42; }
 
-        .question-text {
-            font-size: 1.2rem;
-            font-weight: 700;
-            line-height: 1.6;
-            text-align: center;
-            color: #172E42;
-        }
-
-        /* Options de réponse */
-        .answers-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
+        /* ── Réponses ── */
+        .answers-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-bottom:2rem; }
         .answer-option {
-            background: rgba(255, 255, 255, 0.95);
-            border: 3px solid rgba(210, 122, 45, 0.2);
-            border-radius: 16px;
-            padding: 1.25rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            position: relative;
-            min-height: 80px;
-            box-shadow: 0 4px 12px rgba(23, 46, 66, 0.06);
-            backdrop-filter: blur(10px);
+            background:rgba(255,255,255,0.95);
+            border:3px solid rgba(210,122,45,0.2); border-radius:16px;
+            padding:1.25rem; cursor:pointer;
+            transition:all 0.3s ease;
+            display:flex; align-items:center; justify-content:center; gap:1rem;
+            position:relative; min-height:80px;
+            box-shadow:0 4px 12px rgba(23,46,66,0.06);
+            backdrop-filter:blur(10px);
         }
+        .answer-option:hover    { border:1px solid #D27A2D; background:#d27a2d26; transform:translateY(-2px); }
+        .answer-option.selected { border:1px solid #D27A2D; background:#d27a2d26; transform:translateY(4px); box-shadow:0 2px 0 #D27A2D; }
+        .answer-option.correct  { border:1px solid #10B981; background:rgba(16,185,129,0.15); transform:translateY(-2px); box-shadow:0 2px 0 #10B981; }
+        .answer-option.incorrect{ border-color:#DC2626; background:linear-gradient(135deg,rgba(220,38,38,0.15),rgba(239,68,68,0.15)); box-shadow:0 0 0 4px rgba(220,38,38,0.15); }
+        .answer-option.disabled { pointer-events:none; opacity:0.7; }
 
-        .answer-option:hover {
-            border: 1px solid #D27A2D;
-            background: #d27a2d26;
-            transform: translateY(-2px);
-            box-shadow: #d27a2d26;
-        }
-
-        .answer-option.selected {
-            border: 1px solid #D27A2D;
-            background: #d27a2d26;
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 #D27A2D;
-        }
-
-        .answer-option.correct {
-            border: 1px solid #10B981;
-            background: rgba(16, 185, 129, 0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 0 #10B981;
-        }
-
-        .answer-option.incorrect {
-            border-color: #DC2626;
-            background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(239, 68, 68, 0.15) 100%);
-            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15);
-        }
-
-        .answer-option.disabled {
-            pointer-events: none;
-            opacity: 0.7;
-        }
-
-        .answer-text {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #172E42;
-            text-align: center;
-            line-height: 1.4;
-        }
-
+        .answer-text { font-size:0.95rem; font-weight:600; color:#172E42; text-align:center; line-height:1.4; }
         .answer-number {
-            position: absolute;
-            top: 0.75rem;
-            right: 0.75rem;
-            width: 28px;
-            height: 28px;
-            background: rgba(210, 122, 45, 0.15);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 0.8rem;
-            color: #D27A2D;
-            border: 2px solid rgba(210, 122, 45, 0.3);
+            position:absolute; top:0.75rem; right:0.75rem;
+            width:28px; height:28px; background:rgba(210,122,45,0.15);
+            border-radius:50%; display:flex; align-items:center; justify-content:center;
+            font-weight:800; font-size:0.8rem; color:#D27A2D;
+            border:2px solid rgba(210,122,45,0.3);
         }
+        .answer-option.selected .answer-number { background:#D27A2D; color:#FFFFFF; border-color:#D27A2D; }
 
-        .answer-option.selected .answer-number {
-            background: #D27A2D;
-            color: #FFFFFF;
-            border-color: #D27A2D;
-        }
-
-        /* Boutons */
-        .actions {
-            margin-top: 1.5rem;
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-
+        /* ── Boutons ── */
+        .actions { margin-top:1.5rem; display:flex; gap:1rem; justify-content:center; }
         .btn {
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            border: none;
-            font-size: 0.95rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Nunito', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            padding:1rem 2rem; border-radius:12px; border:none;
+            font-size:0.95rem; font-weight:800; cursor:pointer;
+            transition:all 0.3s ease; font-family:'Nunito',sans-serif;
+            text-transform:uppercase; letter-spacing:1px;
         }
+        .btn-skip     { background:rgba(210,122,45,0.1); border:2px solid rgba(210,122,45,0.3); color:#172E42; }
+        .btn-skip:hover { border-color:#D27A2D; background:rgba(210,122,45,0.2); transform:translateY(-2px); }
+        .btn-validate { background:linear-gradient(135deg,#D27A2D,#F59E0B); color:#FFFFFF; border:2px solid transparent; box-shadow:0 4px 16px rgba(210,122,45,0.3); }
+        .btn-validate:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(210,122,45,0.4); }
+        .btn-validate:disabled { opacity:0.4; cursor:not-allowed; }
+        .btn-next { background:linear-gradient(135deg,#10B981,#059669); color:#FFFFFF; border:2px solid transparent; box-shadow:0 4px 16px rgba(16,185,129,0.3); }
+        .btn-next:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(16,185,129,0.4); }
 
-        .btn-skip {
-            background: rgba(210, 122, 45, 0.1);
-            border: 2px solid rgba(210, 122, 45, 0.3);
-            color: #172E42;
-        }
-
-        .btn-skip:hover {
-            border-color: #D27A2D;
-            background: rgba(210, 122, 45, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .btn-validate {
-            background: linear-gradient(135deg, #D27A2D 0%, #F59E0B 100%);
-            color: #FFFFFF;
-            border: 2px solid transparent;
-            box-shadow: 0 4px 16px rgba(210, 122, 45, 0.3);
-        }
-
-        .btn-validate:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(210, 122, 45, 0.4);
-        }
-
-        .btn-validate:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .btn-next {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            color: #FFFFFF;
-            border: 2px solid transparent;
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-next:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
-        }
-
-        /* Mascotte latérale avec bulle */
+        /* ── Mascotte latérale ── */
         .side-mascot {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 220px;
-            height: 220px;
-            pointer-events: none;
-            z-index: 15;
-            opacity: 0;
-            transform: translateX(300px) scale(0.8);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position:fixed; bottom:30px; right:30px;
+            width:220px; height:220px;
+            pointer-events:none; z-index:15;
+            opacity:0; transform:translateX(300px) scale(0.8);
+            transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);
         }
-
-        .side-mascot.show {
-            opacity: 1;
-            transform: translateX(0) scale(1);
-        }
-
+        .side-mascot.show { opacity:1; transform:translateX(0) scale(1); }
         .side-mascot img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 8px 24px rgba(23, 46, 66, 0.2));
-            animation: mascotBounce 2s infinite ease-in-out;
+            width:100%; height:100%; object-fit:contain;
+            filter:drop-shadow(0 8px 24px rgba(23,46,66,0.2));
+            animation:mascotBounce 2s infinite ease-in-out;
         }
-
-        @keyframes mascotBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+        @keyframes mascotBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 
         .mascot-speech-bubble {
-            position: fixed;
-            bottom: 260px;
-            right: 40px;
-            background: #FFFFFF;
-            padding: 1.25rem 1.5rem;
-            border-radius: 20px;
-            border: 3px solid #D27A2D;
-            max-width: 240px;
-            z-index: 16;
-            opacity: 0;
-            transform: translateX(300px) scale(0.9);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position:fixed; bottom:260px; right:40px;
+            background:#FFFFFF; padding:1.25rem 1.5rem;
+            border-radius:20px; border:3px solid #D27A2D;
+            max-width:240px; z-index:16;
+            opacity:0; transform:translateX(300px) scale(0.9);
+            transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);
         }
+        .mascot-speech-bubble.show { opacity:1; transform:translateX(0) scale(1); }
+        .mascot-speech-bubble::after  { content:''; position:absolute; bottom:-15px; right:70px; width:0; height:0; border-left:15px solid transparent; border-right:15px solid transparent; border-top:15px solid #D27A2D; }
+        .mascot-speech-bubble::before { content:''; position:absolute; bottom:-10px; right:72px; width:0; height:0; border-left:13px solid transparent; border-right:13px solid transparent; border-top:13px solid #FFFFFF; z-index:1; }
+        .mascot-speech-text { font-size:0.95rem; font-weight:700; color:#172E42; line-height:1.5; text-align:center; }
 
-        .mascot-speech-bubble.show {
-            opacity: 1;
-            transform: translateX(0) scale(1);
-        }
-
-        .mascot-speech-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            right: 70px;
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 15px solid #D27A2D;
-        }
-
-        .mascot-speech-bubble::before {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            right: 72px;
-            width: 0;
-            height: 0;
-            border-left: 13px solid transparent;
-            border-right: 13px solid transparent;
-            border-top: 13px solid #FFFFFF;
-            z-index: 1;
-        }
-
-        .mascot-speech-text {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #172E42;
-            line-height: 1.5;
-            text-align: center;
-        }
-
-        /* Feedback overlay */
+        /* ── Feedback overlay ── */
         .feedback-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(23, 46, 66, 0.85);
-            backdrop-filter: blur(12px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            animation: fadeIn 0.3s;
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(23,46,66,0.85); backdrop-filter:blur(12px);
+            display:none; align-items:center; justify-content:center;
+            z-index:100; animation:fadeIn 0.3s;
         }
+        .feedback-overlay.show { display:flex; }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
-        .feedback-overlay.show {
-            display: flex;
-        }
+        .feedback-content { text-align:center; animation:slideUpFade 0.5s ease-out; max-width:90%; }
+        @keyframes slideUpFade { from{opacity:0;transform:translateY(40px) scale(0.9)} to{opacity:1;transform:translateY(0) scale(1)} }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        .feedback-mascot { width:200px; height:200px; margin:0 auto 2rem; animation:mascotPop 0.5s ease-out; }
+        @keyframes mascotPop { 0%{transform:scale(0);rotate:-180deg} 70%{transform:scale(1.1);rotate:10deg} 100%{transform:scale(1);rotate:0deg} }
+        .feedback-mascot img { width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 12px 32px rgba(0,0,0,0.4)); }
 
-        .feedback-content {
-            text-align: center;
-            animation: slideUpFade 0.5s ease-out;
-            max-width: 90%;
-        }
+        .feedback-title-big { font-size:3rem; font-weight:900; margin-bottom:1rem; text-transform:uppercase; letter-spacing:4px; text-shadow:0 4px 12px rgba(0,0,0,0.3); }
+        .feedback-title-big.correct   { color:#10B981; }
+        .feedback-title-big.incorrect { color:#EF4444; }
+        .feedback-subtitle { font-size:1.3rem; color:rgba(255,255,255,0.9); font-weight:600; }
 
-        @keyframes slideUpFade {
-            from {
-                opacity: 0;
-                transform: translateY(40px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .feedback-mascot {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 2rem;
-            animation: mascotPop 0.5s ease-out;
-        }
-
-        @keyframes mascotPop {
-            0% {
-                transform: scale(0);
-                rotate: -180deg;
-            }
-            70% {
-                transform: scale(1.1);
-                rotate: 10deg;
-            }
-            100% {
-                transform: scale(1);
-                rotate: 0deg;
-            }
-        }
-
-        .feedback-mascot img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.4));
-        }
-
-        .feedback-title-big {
-            font-size: 3rem;
-            font-weight: 900;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .feedback-title-big.correct {
-            color: #10B981;
-        }
-
-        .feedback-title-big.incorrect {
-            color: #EF4444;
-        }
-
-        .feedback-subtitle {
-            font-size: 1.3rem;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 600;
-        }
-
-        /* Feedback box (explication seulement) */
+        /* ── Feedback inline ── */
         .feedback {
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-            border: 3px solid rgba(210, 122, 45, 0.3);
-            display: none;
-            backdrop-filter: blur(10px);
+            background:rgba(255,255,255,0.98); border-radius:16px;
+            padding:1.5rem; margin-top:1.5rem;
+            border:3px solid rgba(210,122,45,0.3);
+            display:none; backdrop-filter:blur(10px);
         }
+        .feedback.show    { display:block; animation:slideUp 0.4s ease-out; }
+        @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        .feedback.correct  { border:1px solid #10B981; background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(5,150,105,0.05)); }
+        .feedback.incorrect{ border:1px solid #EF4444; background:linear-gradient(135deg,rgba(239,68,68,0.1),rgba(220,38,38,0.05)); }
+        .feedback-title    { font-size:1.1rem; font-weight:800; margin-bottom:1rem; }
+        .feedback.correct   .feedback-title { color:#059669; }
+        .feedback.incorrect .feedback-title { color:#DC2626; }
+        .feedback-explanation { color:#172E42; line-height:1.6; font-size:0.9rem; font-weight:600; }
 
-        .feedback.show {
-            display: block;
-            animation: slideUp 0.4s ease-out;
-        }
+        /* ── Loading ── */
+        .loading { text-align:center; padding:4rem 1.5rem; }
+        .spinner { width:60px; height:60px; border:5px solid rgba(210,122,45,0.2); border-top-color:#D27A2D; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 1.5rem; }
+        @keyframes spin { to{transform:rotate(360deg)} }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .feedback.correct {
-            border: 1px solid #10B981;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
-        }
-
-        .feedback.incorrect {
-            border: 1px solid #EF4444;
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
-        }
-
-        .feedback-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-        }
-
-        .feedback.correct .feedback-title {
-            color: #059669;
-        }
-
-        .feedback.incorrect .feedback-title {
-            color: #DC2626;
-        }
-
-        .feedback-explanation {
-            color: #172E42;
-            line-height: 1.6;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        /* Loading */
-        .loading {
-            text-align: center;
-            padding: 4rem 1.5rem;
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(210, 122, 45, 0.2);
-            border-top-color: #D27A2D;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 1.5rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Hide mobile elements by default */
-        .mobile-header {
-            display: none;
-        }
-
-        .mobile-overlay {
-            display: none;
-        }
-
-        .bottom-nav {
-            display: none;
-        }
-
-        /* Responsive mobile */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                width: 256px !important;
-            }
-
-            .sidebar.mobile-open {
-                transform: translateX(0);
-            }
-
-            .main-wrapper {
-                margin-left: 0 !important;
-                padding-bottom: 80px;
-            }
-
-            .mobile-header {
-                display: flex !important;
-                align-items: center;
-                justify-content: space-between;
-                padding: 1rem;
-                background: #1e3a5f;
-                position: sticky;
-                top: 0;
-                z-index: 30;
-            }
-
-            .mobile-menu-btn {
-                width: 40px;
-                height: 40px;
-                border: none;
-                background: transparent;
-                color: white;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .mobile-logo {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                text-decoration: none;
-            }
-
-            .mobile-overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 35;
-            }
-
-            .mobile-overlay.active {
-                display: block;
-            }
-
-            .bottom-nav {
-                display: flex !important;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: #1e3a5f;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-                z-index: 50;
-                height: 64px;
-            }
-
-            .bottom-nav-item {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                color: rgba(255, 255, 255, 0.5);
-                text-decoration: none;
-                font-size: 12px;
-                font-weight: 600;
-                gap: 4px;
-                transition: all 0.2s;
-            }
-
-            .bottom-nav-item.active {
-                color: #ff8c42;
-            }
-
-            .bottom-nav-item:hover {
-                color: rgba(255, 255, 255, 0.7);
-            }
-
-            .bottom-nav-item.active:hover {
-                color: #ff8c42;
-            }
-
-            .bottom-nav-icon {
-                width: 24px;
-                height: 24px;
-            }
-
-            /* Mascottes flottantes plus petites sur mobile */
-            .mascot-float:nth-child(1) { width: 100px; height: 100px; }
-            .mascot-float:nth-child(2) { width: 80px; height: 80px; }
-            .mascot-float:nth-child(3) { width: 120px; height: 120px; }
-            .mascot-float:nth-child(4) { width: 70px; height: 70px; }
-            .mascot-float:nth-child(5) { width: 90px; height: 90px; }
-            .mascot-float:nth-child(6) { width: 75px; height: 75px; }
-            .mascot-float:nth-child(7) { width: 85px; height: 85px; }
-            .mascot-float:nth-child(8) { width: 95px; height: 95px; }
-        }
-
+        /* ── Responsive ── */
         @media (max-width: 768px) {
-            .header {
-                padding: 0.75rem 1rem;
-            }
+            .header         { padding:0.75rem 1rem; }
+            .header-content { gap:1rem; }
+            .close-btn      { width:36px; height:36px; min-width:36px; font-size:1.1rem; }
+            .container      { padding:1.5rem 1rem; }
+            .timer-circle   { width:100px; height:100px; }
+            .timer-text     { font-size:2rem; }
+            .question-text  { font-size:1.05rem; }
+            .answers-grid   { grid-template-columns:1fr; gap:0.75rem; }
+            .answer-option  { padding:1rem; min-height:70px; }
+            .answer-text    { font-size:0.9rem; }
+            .actions        { flex-direction:column; gap:0.75rem; }
+            .btn            { width:100%; padding:1rem; }
+            .feedback-title-big  { font-size:2.2rem; }
+            .feedback-subtitle   { font-size:1.1rem; }
+            .feedback-mascot     { width:160px; height:160px; }
+            .side-mascot         { width:160px; height:160px; bottom:15px; right:15px; }
+            .mascot-speech-bubble{ bottom:185px; right:20px; max-width:180px; padding:1rem 1.25rem; }
+            .mascot-speech-text  { font-size:0.85rem; }
+        }
 
-            .header-content {
-                gap: 1rem;
-            }
-
-            .close-btn {
-                width: 36px;
-                height: 36px;
-                min-width: 36px;
-                font-size: 1.1rem;
-            }
-
-            .container {
-                padding: 1.5rem 1rem;
-            }
-
-            .timer-circle {
-                width: 100px;
-                height: 100px;
-            }
-
-            .timer-text {
-                font-size: 2rem;
-            }
-
-            .question-text {
-                font-size: 1.05rem;
-            }
-
-            .answers-grid {
-                grid-template-columns: 1fr;
-                gap: 0.75rem;
-            }
-
-            .answer-option {
-                padding: 1rem;
-                min-height: 70px;
-            }
-
-            .answer-text {
-                font-size: 0.9rem;
-            }
-
-            .actions {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
-
-            .btn {
-                width: 100%;
-                padding: 1rem;
-            }
-
-            .feedback-title-big {
-                font-size: 2.2rem;
-            }
-
-            .feedback-subtitle {
-                font-size: 1.1rem;
-            }
-
-            .feedback-mascot {
-                width: 160px;
-                height: 160px;
-            }
-
-            .side-mascot {
-                width: 160px;
-                height: 160px;
-                bottom: 15px;
-                right: 15px;
-            }
-
-            .mascot-speech-bubble {
-                bottom: 185px;
-                right: 20px;
-                max-width: 180px;
-                padding: 1rem 1.25rem;
-            }
-
-            .mascot-speech-text {
-                font-size: 0.85rem;
-            }
+        @media (max-width: 1024px) {
+            .mascot-float:nth-child(1) { width:100px; height:100px; }
+            .mascot-float:nth-child(2) { width:80px;  height:80px;  }
+            .mascot-float:nth-child(3) { width:120px; height:120px; }
+            .mascot-float:nth-child(4) { width:70px;  height:70px;  }
+            .mascot-float:nth-child(5) { width:90px;  height:90px;  }
+            .mascot-float:nth-child(6) { width:75px;  height:75px;  }
+            .mascot-float:nth-child(7) { width:85px;  height:85px;  }
+            .mascot-float:nth-child(8) { width:95px;  height:95px;  }
         }
 
         @media (max-width: 480px) {
-            .question-container {
-                padding: 1.5rem;
-            }
-
-            .question-text {
-                font-size: 1rem;
-            }
-
-            .answer-text {
-                font-size: 0.85rem;
-            }
+            .question-container { padding:1.5rem; }
+            .question-text      { font-size:1rem; }
+            .answer-text        { font-size:0.85rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Background animé avec mascottes -->
+    <!-- Background animé -->
     <div class="animated-background">
-        <!-- Mascottes flottantes avec variations -->
         <div class="mascot-float mascot-variant-1"><img src="mascotte/no_bg/coach.png" alt=""></div>
         <div class="mascot-float mascot-variant-2"><img src="mascotte/no_bg/joyeux.png" alt=""></div>
         <div class="mascot-float mascot-variant-3"><img src="mascotte/no_bg/applaudit.png" alt=""></div>
@@ -1320,731 +385,338 @@
         <div class="mascot-float mascot-variant-7"><img src="mascotte/no_bg/faire_choix.png" alt=""></div>
         <div class="mascot-float mascot-variant-8"><img src="mascotte/no_bg/gene.png" alt=""></div>
     </div>
-
-    <!-- Overlay pour meilleure lisibilité -->
     <div class="content-overlay"></div>
 
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <a href="/dashboard" class="sidebar-logo">
-                <div class="logo-icon">5</div>
-                <div class="logo-text">5 SECONDES<br/>CHRONO</div>
-            </a>
-            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
-                <svg class="icon-menu" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                <svg class="icon-sidebar" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
-                    <rect x="3" y="3" width="7" height="18" rx="1" stroke-width="2"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 6h6M14 12h6M14 18h6" />
-                </svg>
-            </button>
+    <!-- ↓ La sidebar sera injectée ici par sidebar.js ↓ -->
+
+    <!-- Contenu principal -->
+    <div class="sb-main-content">
+
+        <!-- Mascotte latérale -->
+        <div class="side-mascot" id="sideMascot">
+            <img id="sideMascotImage" src="mascotte/no_bg/applaudit.png" alt="Mascot">
+        </div>
+        <div class="mascot-speech-bubble" id="mascotSpeech">
+            <div class="mascot-speech-text" id="mascotSpeechText">Bonne chance !</div>
         </div>
 
-        <nav class="sidebar-nav">
-            <a href="/dashboard" class="nav-item" data-tooltip="Mon cours">
-                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                </svg>
-                <span class="nav-label">Mon cours</span>
-            </a>
-            <a href="/quiz" class="nav-item active" data-tooltip="Quiz">
-                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
-                </svg>
-                <span class="nav-label">Quiz</span>
-            </a>
-        </nav>
+        <!-- Overlay de feedback -->
+        <div class="feedback-overlay" id="feedbackOverlay">
+            <div class="feedback-content">
+                <div class="feedback-mascot"><img id="overlayMascotImage" src="" alt="Feedback"></div>
+                <div class="feedback-title-big" id="overlayTitle"></div>
+                <div class="feedback-subtitle" id="overlaySubtitle"></div>
+            </div>
+        </div>
 
-        <div class="sidebar-user">
-            <div class="user-info">
-                <div class="user-avatar">U</div>
-                <div class="user-details">
-                    <div class="user-name">Utilisateur</div>
-                    <div class="user-email">user@example.com</div>
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <button class="close-btn" onclick="confirmQuit()" title="Quitter">✕</button>
+                <div class="progress-container">
+                    <div class="progress-label">Progression</div>
+                    <div class="progress-bar"><div class="progress-fill" id="progressBar"></div></div>
+                </div>
+                <div class="lives-container">
+                    <div class="lives-label">Vies</div>
+                    <div class="lives" id="lives"></div>
                 </div>
             </div>
-            <a href="/auth/logout" class="logout-btn">Déconnexion</a>
-        </div>
-    </aside>
-
-    <!-- Mobile Header -->
-    <header class="mobile-header">
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
-        <a href="/dashboard" class="mobile-logo">
-            <div class="logo-icon">5</div>
-            <span class="logo-text">5 SECONDES CHRONO</span>
-        </a>
-        <div style="width: 40px;"></div>
-    </header>
-
-    <!-- Mobile Overlay -->
-    <div class="mobile-overlay" id="mobileOverlay"></div>
-
-    <!-- Bottom Navigation (Mobile) -->
-    <nav class="bottom-nav">
-        <a href="/dashboard" class="bottom-nav-item">
-            <svg class="bottom-nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-            </svg>
-            <span>Mon cours</span>
-        </a>
-        <a href="/quiz" class="bottom-nav-item active">
-            <svg class="bottom-nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
-            </svg>
-            <span>Quiz</span>
-        </a>
-    </nav>
-
-    <!-- Main Wrapper -->
-    <div class="main-wrapper">
-
-    <!-- Mascotte latérale -->
-    <div class="side-mascot" id="sideMascot">
-        <img id="sideMascotImage" src="mascotte/no_bg/applaudit.png" alt="Mascot">
-    </div>
-
-    <!-- Bulle de dialogue -->
-    <div class="mascot-speech-bubble" id="mascotSpeech">
-        <div class="mascot-speech-text" id="mascotSpeechText">Bonne chance !</div>
-    </div>
-
-    <!-- Overlay de feedback -->
-    <div class="feedback-overlay" id="feedbackOverlay">
-        <div class="feedback-content">
-            <div class="feedback-mascot">
-                <img id="overlayMascotImage" src="" alt="Feedback">
-            </div>
-            <div class="feedback-title-big" id="overlayTitle"></div>
-            <div class="feedback-subtitle" id="overlaySubtitle"></div>
-        </div>
-    </div>
-
-    <!-- Header -->
-    <div class="header">
-        <div class="header-content">
-            <button class="close-btn" onclick="confirmQuit()" title="Quitter">✕</button>
-            <div class="progress-container">
-                <div class="progress-label">Progression</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressBar"></div>
-                </div>
-            </div>
-            <div class="lives-container">
-                <div class="lives-label">Vies</div>
-                <div class="lives" id="lives"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Loading -->
-    <div id="loading" class="loading">
-        <div class="spinner"></div>
-        <p style="color: #172E42; font-size: 1rem; font-weight: 700;">Chargement...</p>
-    </div>
-
-    <!-- Container principal -->
-    <div class="container" id="quizContainer" style="display: none;">
-        
-        <!-- Timer -->
-        <div class="timer-section">
-            <div class="timer-circle">
-                <svg class="timer-svg" width="120" height="120">
-                    <circle class="timer-circle-bg" cx="60" cy="60" r="54"></circle>
-                    <circle class="timer-circle-progress" id="timerCircle" cx="60" cy="60" r="54"></circle>
-                </svg>
-                <div class="timer-text" id="timerText">5</div>
-            </div>
-            <div class="timer-label">SECONDES</div>
         </div>
 
-        <!-- Zone de quiz -->
-        <div id="questionContainer">
-            
-            <!-- Badge catégorie -->
-            <div style="text-align: center;">
-                <div class="question-badge">
-                    <svg class="question-badge-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        <!-- Loading -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p style="color:#172E42;font-size:1rem;font-weight:700;">Chargement...</p>
+        </div>
+
+        <!-- Container quiz -->
+        <div class="container" id="quizContainer" style="display:none;">
+
+            <div class="timer-section">
+                <div class="timer-circle">
+                    <svg class="timer-svg" width="120" height="120">
+                        <circle class="timer-circle-bg"       cx="60" cy="60" r="54"></circle>
+                        <circle class="timer-circle-progress" cx="60" cy="60" r="54" id="timerCircle"></circle>
                     </svg>
-                    <span id="questionType">Chargement...</span>
+                    <div class="timer-text" id="timerText">5</div>
                 </div>
+                <div class="timer-label">SECONDES</div>
             </div>
 
-            <!-- Question -->
-            <div class="question-container">
-                <div class="question-text" id="questionText"></div>
-            </div>
+            <div id="questionContainer">
+                <div style="text-align:center;">
+                    <div class="question-badge">
+                        <svg class="question-badge-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        <span id="questionType">Chargement...</span>
+                    </div>
+                </div>
 
-            <!-- Réponses -->
-            <div class="answers-grid" id="answersGrid">
-            </div>
+                <div class="question-container">
+                    <div class="question-text" id="questionText"></div>
+                </div>
 
-            <!-- Feedback (explication uniquement) -->
-            <div class="feedback" id="feedback">
-                <div class="feedback-title" id="feedbackTitle"></div>
-                <div class="feedback-explanation" id="feedbackExplanation"></div>
-            </div>
+                <div class="answers-grid" id="answersGrid"></div>
 
-            <!-- Boutons d'action -->
-            <div class="actions">
-                <button class="btn btn-skip" onclick="skipQuestion()">Passer</button>
-                <button class="btn btn-validate" id="validateBtn" onclick="validateAnswer()" disabled>Valider</button>
+                <div class="feedback" id="feedback">
+                    <div class="feedback-title" id="feedbackTitle"></div>
+                    <div class="feedback-explanation" id="feedbackExplanation"></div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-skip"     onclick="skipQuestion()">Passer</button>
+                    <button class="btn btn-validate" id="validateBtn" onclick="validateAnswer()" disabled>Valider</button>
+                </div>
             </div>
 
         </div>
 
-    </div>
+    </div><!-- fin sb-main-content -->
 
-    </div> <!-- End main-wrapper -->
+    <!-- Sidebar chargée en dernier -->
+    <script src="sidebar.js"></script>
 
     <script>
-        // Sidebar toggle
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileOverlay = document.getElementById('mobileOverlay');
-
-        sidebarToggle?.addEventListener('click', () => {
-            sidebar.classList.toggle('expanded');
-        });
-
-        mobileMenuBtn?.addEventListener('click', () => {
-            sidebar.classList.add('mobile-open');
-            sidebar.classList.add('expanded');
-            mobileOverlay.classList.add('active');
-        });
-
-        mobileOverlay?.addEventListener('click', () => {
-            sidebar.classList.remove('mobile-open');
-            mobileOverlay.classList.remove('active');
-        });
-
-        // Chemins des images de mascotte
         const MASCOT_IMAGES = {
             applaudit: 'mascotte/no_bg/applaudit.png',
-            triste: 'mascotte/no_bg/triste.png',
-            time_up: 'mascotte/no_bg/time_is_up.png',
-            passe: 'mascotte/no_bg/triste2.png'
+            triste:    'mascotte/no_bg/triste.png',
+            time_up:   'mascotte/no_bg/time_is_up.png',
+            passe:     'mascotte/no_bg/triste2.png'
         };
 
-        // Base de données de questions mockées
         const MOCK_QUESTIONS = [
-            {
-                id: 1,
-                categoryId: 1,
-                categoryName: "Durée et renouvellement",
-                questionText: "Quelle est la durée minimale légale d'un bail commercial en France ?",
-                answers: [
-                    { id: 1, answerText: "3 ans", isCorrect: false },
-                    { id: 2, answerText: "6 ans", isCorrect: false },
-                    { id: 3, answerText: "9 ans", isCorrect: true },
-                    { id: 4, answerText: "12 ans", isCorrect: false }
-                ],
-                explanation: "La durée minimale légale d'un bail commercial est de 9 ans selon l'article L145-4 du Code de commerce."
-            },
-            {
-                id: 2,
-                categoryId: 2,
-                categoryName: "Loyer et charges",
-                questionText: "À quelle fréquence le loyer d'un bail commercial peut-il être révisé ?",
-                answers: [
-                    { id: 5, answerText: "Tous les ans", isCorrect: true },
-                    { id: 6, answerText: "Tous les 2 ans", isCorrect: false },
-                    { id: 7, answerText: "Tous les 3 ans", isCorrect: false },
-                    { id: 8, answerText: "Tous les 5 ans", isCorrect: false }
-                ],
-                explanation: "Le loyer peut être révisé tous les ans, mais la révision est plafonnée par l'indice trimestriel des loyers commerciaux (ILC)."
-            },
-            {
-                id: 3,
-                categoryId: 4,
-                categoryName: "Résiliation",
-                questionText: "Quel est le délai de préavis pour un congé donné par le bailleur à l'échéance du bail commercial ?",
-                answers: [
-                    { id: 9, answerText: "3 mois", isCorrect: false },
-                    { id: 10, answerText: "6 mois", isCorrect: true },
-                    { id: 11, answerText: "9 mois", isCorrect: false },
-                    { id: 12, answerText: "12 mois", isCorrect: false }
-                ],
-                explanation: "Le bailleur doit donner congé au moins 6 mois avant l'échéance du bail."
-            },
-            {
-                id: 4,
-                categoryId: 2,
-                categoryName: "Loyer et charges",
-                questionText: "Qu'est-ce que le déplafonnement du loyer ?",
-                answers: [
-                    { id: 13, answerText: "L'augmentation libre du loyer chaque année", isCorrect: false },
-                    { id: 14, answerText: "La possibilité de dépasser la variation de l'indice", isCorrect: true },
-                    { id: 15, answerText: "La suppression du loyer", isCorrect: false },
-                    { id: 16, answerText: "Le gel du loyer pendant 3 ans", isCorrect: false }
-                ],
-                explanation: "Le déplafonnement permet au bailleur de demander un loyer supérieur à la variation de l'indice légal lors du renouvellement."
-            }
+            { id:1, categoryId:1, categoryName:"Durée et renouvellement", questionText:"Quelle est la durée minimale légale d'un bail commercial en France ?", answers:[{id:1,answerText:"3 ans",isCorrect:false},{id:2,answerText:"6 ans",isCorrect:false},{id:3,answerText:"9 ans",isCorrect:true},{id:4,answerText:"12 ans",isCorrect:false}], explanation:"La durée minimale légale d'un bail commercial est de 9 ans selon l'article L145-4 du Code de commerce." },
+            { id:2, categoryId:2, categoryName:"Loyer et charges",        questionText:"À quelle fréquence le loyer d'un bail commercial peut-il être révisé ?", answers:[{id:5,answerText:"Tous les ans",isCorrect:true},{id:6,answerText:"Tous les 2 ans",isCorrect:false},{id:7,answerText:"Tous les 3 ans",isCorrect:false},{id:8,answerText:"Tous les 5 ans",isCorrect:false}], explanation:"Le loyer peut être révisé tous les ans, mais la révision est plafonnée par l'ILC." },
+            { id:3, categoryId:4, categoryName:"Résiliation",             questionText:"Quel est le délai de préavis pour un congé donné par le bailleur à l'échéance du bail commercial ?", answers:[{id:9,answerText:"3 mois",isCorrect:false},{id:10,answerText:"6 mois",isCorrect:true},{id:11,answerText:"9 mois",isCorrect:false},{id:12,answerText:"12 mois",isCorrect:false}], explanation:"Le bailleur doit donner congé au moins 6 mois avant l'échéance du bail." },
+            { id:4, categoryId:2, categoryName:"Loyer et charges",        questionText:"Qu'est-ce que le déplafonnement du loyer ?", answers:[{id:13,answerText:"L'augmentation libre du loyer chaque année",isCorrect:false},{id:14,answerText:"La possibilité de dépasser la variation de l'indice",isCorrect:true},{id:15,answerText:"La suppression du loyer",isCorrect:false},{id:16,answerText:"Le gel du loyer pendant 3 ans",isCorrect:false}], explanation:"Le déplafonnement permet au bailleur de demander un loyer supérieur à la variation de l'indice légal lors du renouvellement." }
         ];
 
-        // Variables globales
-        let sessionId = null;
-        let sessionConfig = null;
-        let availableQuestions = [];
-        let currentQuestion = null;
-        let currentQuestionIndex = 0;
-        let selectedAnswer = null;
-        let lives = 5;
-        let timeLeft = 5;
-        let timerInterval = null;
-        let questionStartTime = null;
-        let sessionResults = {
-            answers: [],
-            correctCount: 0,
-            incorrectCount: 0,
-            totalTime: 0
-        };
+        let sessionId = null, availableQuestions = [], currentQuestion = null;
+        let currentQuestionIndex = 0, selectedAnswer = null, lives = 5;
+        let timeLeft = 5, timerInterval = null, questionStartTime = null;
+        let sessionResults = { answers:[], correctCount:0, incorrectCount:0, totalTime:0 };
 
-        // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            sessionId = urlParams.get('sessionId') || 'demo';
-            
-            sessionConfig = {
-                categories: [
-                    { id: 1, name: "Durée et renouvellement" },
-                    { id: 2, name: "Loyer et charges" },
-                    { id: 4, name: "Résiliation" }
-                ]
-            };
-            
-            const categoryIds = sessionConfig.categories.map(c => c.id);
-            availableQuestions = MOCK_QUESTIONS.filter(q => categoryIds.includes(q.categoryId));
-            availableQuestions = shuffleArray(availableQuestions);
-            
+            sessionId = new URLSearchParams(window.location.search).get('sessionId') || 'demo';
+            const categoryIds = [1, 2, 4];
+            availableQuestions = shuffleArray(MOCK_QUESTIONS.filter(q => categoryIds.includes(q.categoryId)));
             generateHearts();
             loadNextQuestion();
         });
 
         function shuffleArray(array) {
-            const newArray = [...array];
-            for (let i = newArray.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-            }
-            return newArray;
+            const a = [...array];
+            for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+            return a;
         }
 
         function generateHearts() {
-            const livesContainer = document.getElementById('lives');
-            livesContainer.innerHTML = '';
-            
+            const c = document.getElementById('lives');
+            c.innerHTML = '';
             for (let i = 0; i < lives; i++) {
-                const heart = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                heart.setAttribute('class', 'heart-icon');
-                heart.setAttribute('viewBox', '0 0 24 24');
-                heart.setAttribute('fill', '#EF4444');
-                heart.innerHTML = '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>';
-                livesContainer.appendChild(heart);
+                const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+                svg.setAttribute('class','heart-icon'); svg.setAttribute('viewBox','0 0 24 24'); svg.setAttribute('fill','#EF4444');
+                svg.innerHTML = '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>';
+                c.appendChild(svg);
             }
         }
 
         function loadNextQuestion() {
-            if (currentQuestionIndex >= availableQuestions.length || lives === 0) {
-                showCompletionMessage();
-                return;
-            }
-            
+            if (currentQuestionIndex >= availableQuestions.length || lives === 0) { showCompletionMessage(); return; }
             hideSideMascot();
             document.getElementById('loading').style.display = 'block';
             document.getElementById('quizContainer').style.display = 'none';
-            
-            setTimeout(() => {
-                currentQuestion = availableQuestions[currentQuestionIndex];
-                displayQuestion();
-            }, 500);
+            setTimeout(() => { currentQuestion = availableQuestions[currentQuestionIndex]; displayQuestion(); }, 500);
         }
 
         function displayQuestion() {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('quizContainer').style.display = 'flex';
-            
-            selectedAnswer = null;
-            timeLeft = 5;
-            questionStartTime = Date.now();
-            
+            selectedAnswer = null; timeLeft = 5; questionStartTime = Date.now();
             document.getElementById('questionType').textContent = currentQuestion.categoryName;
             document.getElementById('questionText').textContent = currentQuestion.questionText;
-            document.getElementById('feedback').classList.remove('show', 'correct', 'incorrect');
+            document.getElementById('feedback').classList.remove('show','correct','incorrect');
             document.getElementById('validateBtn').disabled = true;
-            
-            const answersGrid = document.getElementById('answersGrid');
-            answersGrid.innerHTML = '';
-            
-            const shuffledAnswers = shuffleArray(currentQuestion.answers);
-            
-            shuffledAnswers.forEach((answer, index) => {
-                const answerDiv = document.createElement('div');
-                answerDiv.className = 'answer-option';
-                answerDiv.dataset.answerId = answer.id;
-                answerDiv.innerHTML = `
-                    <div class="answer-number">${index + 1}</div>
-                    <div class="answer-text">${answer.answerText}</div>
-                `;
-                answerDiv.onclick = () => selectAnswer(answer.id, answerDiv);
-                answersGrid.appendChild(answerDiv);
+            const grid = document.getElementById('answersGrid');
+            grid.innerHTML = '';
+            shuffleArray(currentQuestion.answers).forEach((answer, index) => {
+                const div = document.createElement('div');
+                div.className = 'answer-option'; div.dataset.answerId = answer.id;
+                div.innerHTML = `<div class="answer-number">${index+1}</div><div class="answer-text">${answer.answerText}</div>`;
+                div.onclick = () => selectAnswer(answer.id, div);
+                grid.appendChild(div);
             });
-            
             updateProgress();
-            
             document.querySelector('.btn-next')?.remove();
             document.getElementById('validateBtn').style.display = 'inline-block';
             document.querySelector('.btn-skip').style.display = 'inline-block';
-            
             startTimer();
         }
 
         function selectAnswer(answerId, element) {
             if (timerInterval === null) return;
-            
             selectedAnswer = answerId;
-            
-            document.querySelectorAll('.answer-option').forEach(option => {
-                option.classList.remove('selected');
-            });
+            document.querySelectorAll('.answer-option').forEach(o => o.classList.remove('selected'));
             element.classList.add('selected');
-            
             document.getElementById('validateBtn').disabled = false;
         }
 
         function validateAnswer() {
             if (selectedAnswer === null) return;
-            
             stopTimer();
-            
-            const responseTime = ((Date.now() - questionStartTime) / 1000).toFixed(1);
+            const responseTime = ((Date.now() - questionStartTime)/1000).toFixed(1);
             const correctAnswer = currentQuestion.answers.find(a => a.isCorrect);
             const isCorrect = selectedAnswer === correctAnswer.id;
-            
-            sessionResults.answers.push({
-                questionId: currentQuestion.id,
-                answerId: selectedAnswer,
-                isCorrect: isCorrect,
-                timeSpent: parseFloat(responseTime)
-            });
-            
+            sessionResults.answers.push({ questionId:currentQuestion.id, answerId:selectedAnswer, isCorrect, timeSpent:parseFloat(responseTime) });
             sessionResults.totalTime += parseFloat(responseTime);
-            
-            if (isCorrect) {
-                sessionResults.correctCount++;
-            } else {
-                sessionResults.incorrectCount++;
-            }
-            
+            isCorrect ? sessionResults.correctCount++ : sessionResults.incorrectCount++;
             showFeedback(isCorrect, responseTime);
         }
 
         function showFeedback(isCorrect, responseTime) {
             document.querySelectorAll('.answer-option').forEach(option => {
                 option.classList.add('disabled');
-                const answerId = parseInt(option.dataset.answerId);
-                const answer = currentQuestion.answers.find(a => a.id === answerId);
-                
-                if (answer && answer.isCorrect) {
-                    option.classList.add('correct');
-                } else if (answerId === selectedAnswer && !isCorrect) {
-                    option.classList.add('incorrect');
-                }
+                const answer = currentQuestion.answers.find(a => a.id === parseInt(option.dataset.answerId));
+                if (answer?.isCorrect) option.classList.add('correct');
+                else if (parseInt(option.dataset.answerId) === selectedAnswer && !isCorrect) option.classList.add('incorrect');
             });
-            
             const overlay = document.getElementById('feedbackOverlay');
-            const overlayTitle = document.getElementById('overlayTitle');
-            const overlaySubtitle = document.getElementById('overlaySubtitle');
-            const overlayMascot = document.getElementById('overlayMascotImage');
-            
             if (isCorrect) {
-                overlayTitle.textContent = 'BRAVO !';
-                overlayTitle.className = 'feedback-title-big correct';
-                overlaySubtitle.textContent = 'Excellente réponse !';
-                overlayMascot.src = MASCOT_IMAGES.applaudit;
+                setOverlay('BRAVO !','correct','Excellente réponse !', MASCOT_IMAGES.applaudit);
                 showSideMascot(MASCOT_IMAGES.applaudit, "Super ! Continue comme ça !");
             } else {
                 loseLife();
-                overlayTitle.textContent = 'RATÉ !';
-                overlayTitle.className = 'feedback-title-big incorrect';
-                overlaySubtitle.textContent = 'Dommage...';
-                overlayMascot.src = MASCOT_IMAGES.triste;
+                setOverlay('RATÉ !','incorrect','Dommage...', MASCOT_IMAGES.triste);
                 showSideMascot(MASCOT_IMAGES.triste, "Ce n'est pas grave, tu feras mieux la prochaine fois !");
             }
-            
             overlay.classList.add('show');
-            
             setTimeout(() => {
                 overlay.classList.remove('show');
-                
                 const feedback = document.getElementById('feedback');
-                feedback.classList.add('show');
-                
-                if (isCorrect) {
-                    feedback.classList.add('correct');
-                    document.getElementById('feedbackTitle').textContent = 'Bonne réponse !';
-                } else {
-                    feedback.classList.add('incorrect');
-                    document.getElementById('feedbackTitle').textContent = 'Mauvaise réponse';
-                }
-                
+                feedback.classList.add('show', isCorrect ? 'correct' : 'incorrect');
+                document.getElementById('feedbackTitle').textContent = isCorrect ? 'Bonne réponse !' : 'Mauvaise réponse';
                 document.getElementById('feedbackExplanation').textContent = currentQuestion.explanation;
-                
                 document.getElementById('validateBtn').style.display = 'none';
                 document.querySelector('.btn-skip').style.display = 'none';
-                
-                const nextBtn = document.createElement('button');
-                nextBtn.className = 'btn btn-next';
-                nextBtn.textContent = 'Suivant';
-                nextBtn.onclick = nextQuestion;
-                document.querySelector('.actions').appendChild(nextBtn);
+                appendNextBtn();
             }, 1800);
         }
 
         function skipQuestion() {
             if (timerInterval === null) return;
-            
-            stopTimer();
-            loseLife();
-            
-            const overlay = document.getElementById('feedbackOverlay');
-            const overlayTitle = document.getElementById('overlayTitle');
-            const overlaySubtitle = document.getElementById('overlaySubtitle');
-            const overlayMascot = document.getElementById('overlayMascotImage');
-            
-            overlayTitle.textContent = 'PASSÉ';
-            overlayTitle.className = 'feedback-title-big incorrect';
-            overlaySubtitle.textContent = 'Question ignorée';
-            overlayMascot.src = MASCOT_IMAGES.passe;
-            overlay.classList.add('show');
-            
+            stopTimer(); loseLife();
+            setOverlay('PASSÉ','incorrect','Question ignorée', MASCOT_IMAGES.passe);
+            document.getElementById('feedbackOverlay').classList.add('show');
             showSideMascot(MASCOT_IMAGES.passe, "Tu aurais pu essayer !");
-            
             setTimeout(() => {
-                overlay.classList.remove('show');
-                
-                const responseTime = ((Date.now() - questionStartTime) / 1000).toFixed(1);
-                
-                sessionResults.answers.push({
-                    questionId: currentQuestion.id,
-                    answerId: null,
-                    isCorrect: false,
-                    timeSpent: parseFloat(responseTime),
-                    skipped: true
-                });
-                
-                sessionResults.incorrectCount++;
-                sessionResults.totalTime += parseFloat(responseTime);
-                
+                document.getElementById('feedbackOverlay').classList.remove('show');
+                const responseTime = ((Date.now() - questionStartTime)/1000).toFixed(1);
+                sessionResults.answers.push({ questionId:currentQuestion.id, answerId:null, isCorrect:false, timeSpent:parseFloat(responseTime), skipped:true });
+                sessionResults.incorrectCount++; sessionResults.totalTime += parseFloat(responseTime);
                 document.querySelectorAll('.answer-option').forEach(option => {
                     option.classList.add('disabled');
-                    const answerId = parseInt(option.dataset.answerId);
-                    const answer = currentQuestion.answers.find(a => a.id === answerId);
-                    if (answer && answer.isCorrect) {
-                        option.classList.add('correct');
-                    }
+                    if (currentQuestion.answers.find(a => a.id === parseInt(option.dataset.answerId))?.isCorrect) option.classList.add('correct');
                 });
-                
                 const feedback = document.getElementById('feedback');
-                feedback.classList.add('show', 'incorrect');
+                feedback.classList.add('show','incorrect');
                 document.getElementById('feedbackTitle').textContent = 'Question passée';
                 document.getElementById('feedbackExplanation').textContent = currentQuestion.explanation;
-                
                 document.getElementById('validateBtn').style.display = 'none';
                 document.querySelector('.btn-skip').style.display = 'none';
-                
-                const nextBtn = document.createElement('button');
-                nextBtn.className = 'btn btn-next';
-                nextBtn.textContent = 'Suivant';
-                nextBtn.onclick = nextQuestion;
-                document.querySelector('.actions').appendChild(nextBtn);
+                appendNextBtn();
             }, 1800);
         }
 
         function timeUp() {
-            const overlay = document.getElementById('feedbackOverlay');
-            const overlayTitle = document.getElementById('overlayTitle');
-            const overlaySubtitle = document.getElementById('overlaySubtitle');
-            const overlayMascot = document.getElementById('overlayMascotImage');
-            
-            overlayTitle.textContent = 'TEMPS ÉCOULÉ !';
-            overlayTitle.className = 'feedback-title-big incorrect';
-            overlaySubtitle.textContent = 'Trop lent...';
-            overlayMascot.src = MASCOT_IMAGES.time_up;
-            overlay.classList.add('show');
-            
+            setOverlay('TEMPS ÉCOULÉ !','incorrect','Trop lent...', MASCOT_IMAGES.time_up);
+            document.getElementById('feedbackOverlay').classList.add('show');
             showSideMascot(MASCOT_IMAGES.time_up, "Plus vite la prochaine fois !");
-            
             setTimeout(() => {
-                overlay.classList.remove('show');
-                
+                document.getElementById('feedbackOverlay').classList.remove('show');
                 loseLife();
-                
-                sessionResults.answers.push({
-                    questionId: currentQuestion.id,
-                    answerId: null,
-                    isCorrect: false,
-                    timeSpent: 5.0,
-                    timeout: true
-                });
-                
-                sessionResults.incorrectCount++;
-                sessionResults.totalTime += 5.0;
-                
+                sessionResults.answers.push({ questionId:currentQuestion.id, answerId:null, isCorrect:false, timeSpent:5.0, timeout:true });
+                sessionResults.incorrectCount++; sessionResults.totalTime += 5.0;
                 document.querySelectorAll('.answer-option').forEach(option => {
                     option.classList.add('disabled');
-                    const answerId = parseInt(option.dataset.answerId);
-                    const answer = currentQuestion.answers.find(a => a.id === answerId);
-                    if (answer && answer.isCorrect) {
-                        option.classList.add('correct');
-                    }
+                    if (currentQuestion.answers.find(a => a.id === parseInt(option.dataset.answerId))?.isCorrect) option.classList.add('correct');
                 });
-                
                 const feedback = document.getElementById('feedback');
-                feedback.classList.add('show', 'incorrect');
+                feedback.classList.add('show','incorrect');
                 document.getElementById('feedbackTitle').textContent = 'Temps écoulé !';
                 document.getElementById('feedbackExplanation').textContent = currentQuestion.explanation;
-                
                 document.getElementById('validateBtn').style.display = 'none';
                 document.querySelector('.btn-skip').style.display = 'none';
-                
-                const nextBtn = document.createElement('button');
-                nextBtn.className = 'btn btn-next';
-                nextBtn.textContent = 'Suivant';
-                nextBtn.onclick = nextQuestion;
-                document.querySelector('.actions').appendChild(nextBtn);
+                appendNextBtn();
             }, 1800);
+        }
+
+        function setOverlay(title, cls, subtitle, mascotSrc) {
+            document.getElementById('overlayTitle').textContent = title;
+            document.getElementById('overlayTitle').className = 'feedback-title-big ' + cls;
+            document.getElementById('overlaySubtitle').textContent = subtitle;
+            document.getElementById('overlayMascotImage').src = mascotSrc;
+        }
+
+        function appendNextBtn() {
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-next'; btn.textContent = 'Suivant'; btn.onclick = nextQuestion;
+            document.querySelector('.actions').appendChild(btn);
         }
 
         function nextQuestion() {
             hideSideMascot();
-            
-            if (lives === 0) {
-                showCompletionMessage();
-                return;
-            }
-            
+            if (lives === 0) { showCompletionMessage(); return; }
             currentQuestionIndex++;
             loadNextQuestion();
         }
 
-        function showSideMascot(imageSrc, message) {
-            const mascot = document.getElementById('sideMascot');
-            const mascotImage = document.getElementById('sideMascotImage');
-            const speech = document.getElementById('mascotSpeech');
-            const speechText = document.getElementById('mascotSpeechText');
-            
-            mascotImage.src = imageSrc;
-            speechText.textContent = message;
-            
-            mascot.classList.add('show');
-            speech.classList.add('show');
+        function showSideMascot(src, msg) {
+            document.getElementById('sideMascotImage').src = src;
+            document.getElementById('mascotSpeechText').textContent = msg;
+            document.getElementById('sideMascot').classList.add('show');
+            document.getElementById('mascotSpeech').classList.add('show');
         }
 
         function hideSideMascot() {
-            const mascot = document.getElementById('sideMascot');
-            const speech = document.getElementById('mascotSpeech');
-            
-            mascot.classList.remove('show');
-            speech.classList.remove('show');
+            document.getElementById('sideMascot').classList.remove('show');
+            document.getElementById('mascotSpeech').classList.remove('show');
         }
 
         function startTimer() {
             stopTimer();
-            
             const circle = document.getElementById('timerCircle');
-            const text = document.getElementById('timerText');
+            const text   = document.getElementById('timerText');
             const circumference = 2 * Math.PI * 54;
-            
-            circle.style.strokeDasharray = circumference;
+            circle.style.strokeDasharray  = circumference;
             circle.style.strokeDashoffset = 0;
-            circle.classList.remove('warning', 'danger');
-            text.classList.remove('warning', 'danger');
-            
+            circle.classList.remove('warning','danger');
+            text.classList.remove('warning','danger');
             timerInterval = setInterval(() => {
                 timeLeft -= 0.1;
-                
-                if (timeLeft < 0) {
-                    text.textContent = '0';
-                    stopTimer();
-                    setTimeout(() => {
-                        timeUp();
-                    }, 200);
-                    return;
-                }
-                
-                const displayTime = Math.ceil(timeLeft);
-                text.textContent = displayTime;
-                const offset = circumference - (timeLeft / 5) * circumference;
-                circle.style.strokeDashoffset = offset;
-                
-                if (timeLeft <= 2) {
-                    circle.classList.add('danger');
-                    text.classList.add('danger');
-                } else if (timeLeft <= 3) {
-                    circle.classList.add('warning');
-                    text.classList.add('warning');
-                }
+                if (timeLeft < 0) { text.textContent = '0'; stopTimer(); setTimeout(timeUp, 200); return; }
+                text.textContent = Math.ceil(timeLeft);
+                circle.style.strokeDashoffset = circumference - (timeLeft/5)*circumference;
+                if (timeLeft <= 2)      { circle.classList.add('danger');  text.classList.add('danger');  }
+                else if (timeLeft <= 3) { circle.classList.add('warning'); text.classList.add('warning'); }
             }, 100);
         }
 
-        function stopTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-        }
-
-        function updateProgress() {
-            const progress = ((currentQuestionIndex + 1) / availableQuestions.length) * 100;
-            document.getElementById('progressBar').style.width = progress + '%';
-        }
+        function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
+        function updateProgress() { document.getElementById('progressBar').style.width = ((currentQuestionIndex+1)/availableQuestions.length*100)+'%'; }
 
         function loseLife() {
-            if (lives > 0) {
-                lives--;
-                const hearts = document.querySelectorAll('.heart-icon');
-                hearts[lives].classList.add('lost');
-            }
+            if (lives > 0) { lives--; document.querySelectorAll('.heart-icon')[lives].classList.add('lost'); }
         }
 
         function showCompletionMessage() {
             stopTimer();
-            
-            const totalQuestions = sessionResults.answers.length;
-            const correctAnswers = sessionResults.correctCount;
-            const incorrectAnswers = sessionResults.incorrectCount;
-            const averageTime = totalQuestions > 0 ? (sessionResults.totalTime / totalQuestions).toFixed(1) : 0;
-            const xpEarned = correctAnswers * 5;
-            
-            const resultsData = {
-                sessionId: sessionId,
-                totalQuestions: totalQuestions,
-                correctAnswers: correctAnswers,
-                incorrectAnswers: incorrectAnswers,
-                averageTime: parseFloat(averageTime),
-                xpEarned: xpEarned,
-                answers: sessionResults.answers,
-                completedAt: new Date().toISOString()
-            };
-            
-            localStorage.setItem('quizResults', JSON.stringify(resultsData));
+            const data = { sessionId, totalQuestions:sessionResults.answers.length, correctAnswers:sessionResults.correctCount, incorrectAnswers:sessionResults.incorrectCount, averageTime:sessionResults.answers.length>0?(sessionResults.totalTime/sessionResults.answers.length).toFixed(1):0, xpEarned:sessionResults.correctCount*5, answers:sessionResults.answers, completedAt:new Date().toISOString() };
+            localStorage.setItem('quizResults', JSON.stringify(data));
             window.location.href = `3-completion.html?sessionId=${sessionId}`;
         }
 
         function confirmQuit() {
-            if (confirm('Quitter le quiz ?')) {
-                stopTimer();
-                window.location.href = '1-selection.html';
-            }
+            if (confirm('Quitter le quiz ?')) { stopTimer(); window.location.href = '1-selection.html'; }
         }
     </script>
 

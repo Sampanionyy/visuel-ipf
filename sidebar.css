@@ -1,0 +1,278 @@
+/* ═══════════════════════════════════════════════
+   5sChrono — sidebar.css
+   Architecture : sidebar toujours en position:fixed
+   Le body n'a PAS besoin d'être flex.
+   3 modes :
+     > 1200px  → sidebar 240px ouverte, refermable
+     768–1200px → sidebar 68px fermée par défaut, ouvrable
+     < 768px   → bottom nav bar
+   ═══════════════════════════════════════════════ */
+
+:root {
+    --navy:    #172E42;
+    --orange:  #D27A2D;
+    --sw:      240px;   /* sidebar width */
+    --scw:     68px;    /* sidebar collapsed width */
+}
+
+/* ════════════════════════════
+   SIDEBAR — position fixed
+   toujours visible, peu importe
+   ce que le body fait
+   ════════════════════════════ */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sw);
+    height: 100vh;
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 12px;
+    z-index: 500;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: width 0.3s ease;
+}
+
+/* ── Contenu décalé à droite de la sidebar ── */
+.sb-main-content {
+    margin-left: var(--sw);
+    transition: margin-left 0.3s ease;
+    min-width: 0;
+}
+
+/* ── Header : logo + bouton collapse ── */
+.sb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px 28px;
+    gap: 8px;
+}
+
+.sb-brand {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--orange);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+    flex: 1;
+    min-width: 0;
+}
+.sb-brand span { color: white; }
+
+.sb-collapse-btn {
+    background: rgba(255,255,255,0.08);
+    border: none;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+.sb-collapse-btn:hover { background: rgba(255,255,255,0.18); }
+.sb-collapse-btn svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+.sb-collapse-btn.sb-rotated svg { transform: rotate(180deg); }
+
+/* ── Nav ── */
+.sb-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.sb-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    border: 2px solid transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: background 0.15s;
+    cursor: pointer;
+}
+.sb-item:hover  { background: rgba(255,255,255,0.07); }
+.sb-item.active {
+    background: rgba(210,122,45,0.18);
+    border-color: rgba(210,122,45,0.4);
+}
+
+.sb-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.sb-icon svg { width: 22px; height: 22px; }
+
+.sb-label {
+    font-size: 14px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    transition: opacity 0.15s ease;
+}
+.sb-item.active .sb-label { color: var(--orange); }
+.sb-item:hover  .sb-label { color: rgba(255,255,255,0.85); }
+
+/* ════════════════════════════
+   DESKTOP > 1200px
+   Ouvert par défaut
+   Classe .sb-closed pour fermer
+   ════════════════════════════ */
+body.sb-closed .sidebar       { width: var(--scw); }
+body.sb-closed .sb-main-content { margin-left: var(--scw); }
+body.sb-closed .sb-label,
+body.sb-closed .sb-brand      { opacity: 0; pointer-events: none; }
+body.sb-closed .sb-header     { justify-content: center; padding-left: 0; padding-right: 0; }
+body.sb-closed .sb-item {
+    padding: 12px;
+    justify-content: center;
+    gap: 0;
+    position: relative;
+}
+
+/* Tooltip en mode fermé */
+body.sb-closed .sb-item::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(23,46,66,0.95);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    z-index: 600;
+}
+body.sb-closed .sb-item:hover::after { opacity: 1; }
+
+/* ════════════════════════════
+   TABLETTE 768–1200px
+   Fermé par défaut (.sb-closed auto)
+   Ouvert si .sb-open
+   ════════════════════════════ */
+@media (max-width: 1200px) and (min-width: 768px) {
+    /* État fermé par défaut (pas de classe spéciale nécessaire,
+       on gère via .sb-closed ajouté par le JS au chargement) */
+}
+
+/* ════════════════════════════
+   MOBILE < 768px
+   Bottom nav bar
+   ════════════════════════════ */
+@media (max-width: 767px) {
+
+    /* Sidebar → barre du bas */
+    .sidebar {
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 60px !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        padding: 0 4px !important;
+        padding-bottom: env(safe-area-inset-bottom) !important;
+        border-top: 1px solid rgba(255,255,255,0.1) !important;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.2) !important;
+        overflow: visible !important;
+        transition: none !important;
+    }
+
+    /* Contenu : pas de marge gauche, espace sous la barre */
+    .sb-main-content {
+        margin-left: 0 !important;
+        padding-bottom: 60px !important;
+    }
+
+    /* Reset états closed/open sur mobile */
+    body.sb-closed .sidebar,
+    body.sb-open   .sidebar { width: 100% !important; }
+    body.sb-closed .sb-main-content,
+    body.sb-open   .sb-main-content { margin-left: 0 !important; }
+
+    /* Cache header */
+    .sb-header { display: none !important; }
+
+    /* Nav en ligne */
+    .sb-nav {
+        flex-direction: row !important;
+        justify-content: space-around !important;
+        align-items: center !important;
+        gap: 0 !important;
+        flex: 1;
+        width: 100%;
+    }
+
+    /* Items verticaux */
+    .sb-item,
+    body.sb-closed .sb-item,
+    body.sb-open   .sb-item {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 2px !important;
+        padding: 6px 2px !important;
+        border-radius: 8px !important;
+        border: none !important;
+        flex: 1;
+        position: static !important;
+        overflow: visible !important;
+        white-space: nowrap !important;
+    }
+    .sb-item.active { background: rgba(210,122,45,0.18) !important; border: none !important; }
+
+    /* Icônes */
+    .sb-icon {
+        width: 24px !important;
+        height: 24px !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+    }
+    .sb-icon svg { width: 22px !important; height: 22px !important; }
+
+    /* Labels */
+    .sb-label,
+    body.sb-closed .sb-label,
+    body.sb-open   .sb-label {
+        font-size: 9px !important;
+        letter-spacing: 0.3px !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        color: rgba(255,255,255,0.55) !important;
+    }
+    .sb-item.active .sb-label { color: var(--orange) !important; }
+
+    /* Désactive tooltips */
+    .sb-item::after,
+    body.sb-closed .sb-item::after { display: none !important; }
+}
