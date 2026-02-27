@@ -15,6 +15,16 @@
     --scw:     68px;    /* sidebar collapsed width */
 }
 
+
+body {
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+}
+
 /* ════════════════════════════
    SIDEBAR — position fixed
    toujours visible, peu importe
