@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="sidebar.css"/>
+<style>
+/* ── Sidebar inline fallback (si sidebar.css absent) ── */
+.sidebar{position:fixed;top:0;left:0;height:100vh;width:240px;background:#172E42;display:flex;flex-direction:column;z-index:100;transition:width .3s ease}
+.sb-header{display:flex;align-items:center;justify-content:space-between;padding:20px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sb-brand{font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:#D27A2D;text-decoration:none;letter-spacing:0.5px;white-space:nowrap;overflow:hidden}
+.sb-brand span{color:#fff}
+.sb-collapse-btn{background:none;border:none;cursor:pointer;padding:4px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-collapse-btn svg{width:20px;height:20px;transition:transform .3s}
+.sb-nav{display:flex;flex-direction:column;gap:4px;padding:16px 10px;flex:1;overflow-y:auto}
+.sb-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;text-decoration:none;color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;transition:background .2s;white-space:nowrap;overflow:hidden}
+.sb-item:hover,.sb-item.active{background:rgba(255,255,255,0.1)}
+.sb-item.active{background:rgba(210,122,45,0.2);color:#D27A2D}
+.sb-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-icon svg{width:20px;height:20px}
+.sb-label{transition:opacity .2s,width .2s}
+
+/* Closed state */
+body.sb-closed .sidebar{width:64px}
+body.sb-closed .sb-brand{opacity:0;width:0}
+body.sb-closed .sb-label{opacity:0;width:0;overflow:hidden}
+body.sb-closed .sb-collapse-btn svg{transform:rotate(180deg)}
+body.sb-closed .sb-item{justify-content:center;padding:10px}
+body.sb-closed .sb-item gap{gap:0}
+
+/* Main offset */
+.sb-main-content{margin-left:240px;transition:margin-left .3s ease}
+body.sb-closed .sb-main-content{margin-left:64px}
+
+@media(max-width:1199px){
+  .sidebar{width:64px}
+  .sb-brand{opacity:0;width:0}
+  .sb-label{opacity:0;width:0;overflow:hidden}
+  .sb-collapse-btn svg{transform:rotate(180deg)}
+  .sb-item{justify-content:center;padding:10px}
+  .sb-main-content{margin-left:64px}
+  body.sb-open .sidebar{width:240px}
+  body.sb-open .sb-brand{opacity:1;width:auto}
+  body.sb-open .sb-label{opacity:1;width:auto}
+  body.sb-open .sb-collapse-btn svg{transform:rotate(0deg)}
+  body.sb-open .sb-item{justify-content:flex-start;padding:10px 12px}
+  body.sb-open .sb-main-content{margin-left:64px}
+}
+@media(max-width:767px){
+  .sidebar{display:none}
+  .sb-main-content{margin-left:0}
+}
+</style>
+<style>
+/* ══════════════════════════════════════════
+   RESET & ROOT
+══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#F5F4F0;
+  --card:#FFFFFF;
+  --navy:#172E42;
+  --orange:#D27A2D;
+  --orange-light:#E89347;
+  --orange-bg:#FFF9F5;
+  --muted:#6B7280;
+  --border:#E5E7EB;
+  --input-border:#D1D5DB;
+  --shadow:0 2px 16px rgba(23,46,66,0.08);
+  --radius:18px;
+  --radius-sm:12px;
+}
+
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--bg);
+  color:var(--navy);
+  min-height:100vh;
+}
+
+/* ══════════════════════════════════════════
+   MAIN CONTENT (sidebar layout)
+══════════════════════════════════════════ */
+.sb-main-content{
+  padding:36px 32px;
+  min-height:100vh;
+}
+
+/* ══════════════════════════════════════════
+   PAGE HEADER (inline, no topbar)
+══════════════════════════════════════════ */
+.page-header{
+  margin-bottom:28px;
+}
+.page-header h1{
+  font-size:26px;
+  font-weight:900;
+  color:var(--navy);
+  letter-spacing:-0.3px;
+}
+
+/* ══════════════════════════════════════════
+   GRID LAYOUT
+══════════════════════════════════════════ */
+.top-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-bottom:20px;
+}
+.bottom-section{}
+
+/* ══════════════════════════════════════════
+   CARD
+══════════════════════════════════════════ */
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:28px 24px;
+  border:1.5px solid rgba(23,46,66,0.06);
+}
+.card-title{
+  font-size:15px;
+  font-weight:800;
+  color:var(--navy);
+  margin-bottom:22px;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.card-title svg{
+  width:18px;height:18px;fill:var(--orange);flex-shrink:0;
+}
+
+/* ══════════════════════════════════════════
+   AVATAR ROW
+══════════════════════════════════════════ */
+.avatar-row{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:24px;
+  padding:16px;
+  background:linear-gradient(135deg,#172E42 0%,#1e3d58 100%);
+  border-radius:var(--radius-sm);
+}
+.avatar-circle{
+  width:64px;height:64px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--orange) 0%,var(--orange-light) 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:900;color:#fff;
+  flex-shrink:0;
+  box-shadow:0 4px 12px rgba(210,122,45,0.4);
+}
+.avatar-info .name{
+  font-size:15px;font-weight:800;color:#fff;
+}
+.avatar-info .email{
+  font-size:12px;color:rgba(255,255,255,0.6);font-weight:600;margin-top:2px;
+}
+.upload-btn{
+  margin-top:8px;
+  background:rgba(255,255,255,0.12);
+  color:#fff;
+  font-family:'Nunito',sans-serif;
+  font-size:12px;font-weight:700;
+  padding:7px 14px;
+  border-radius:20px;border:1.5px solid rgba(255,255,255,0.25);
+  cursor:pointer;
+  transition:all 0.2s;
+  display:block;
+}
+.upload-btn:hover{
+  background:rgba(255,255,255,0.2);
+  border-color:rgba(255,255,255,0.5);
+}
+
+/* ══════════════════════════════════════════
+   FORM FIELDS
+══════════════════════════════════════════ */
+.field{margin-bottom:14px}
+.field:last-of-type{margin-bottom:0}
+
+.field label{
+  display:block;
+  font-size:11px;font-weight:800;
+  color:var(--muted);
+  margin-bottom:6px;
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+}
+
+.input-wrap{position:relative;display:flex;align-items:center}
+
+.input-wrap input,
+.input-wrap select{
+  width:100%;
+  font-family:'Nunito',sans-serif;
+  font-size:14px;font-weight:600;
+  color:var(--navy);
+  background:#FAFAFA;
+  border:1.5px solid var(--input-border);
+  border-radius:var(--radius-sm);
+  padding:11px 38px 11px 14px;
+  outline:none;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+  appearance:none;-webkit-appearance:none;
+  cursor:pointer;
+}
+.input-wrap input{cursor:text}
+.input-wrap input::placeholder{color:#C0C0C0;font-weight:600}
+
+.input-wrap input:focus,
+.input-wrap select:focus{
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px rgba(210,122,45,0.12);
+  background:#fff;
+}
+
+.input-icon,
+.select-arrow{
+  position:absolute;right:12px;top:50%;
+  transform:translateY(-50%);
+  pointer-events:none;display:flex;
+}
+.input-icon svg,.select-arrow svg{
+  width:15px;height:15px;fill:#C0C0C0;
+}
+
+/* ══════════════════════════════════════════
+   PRIMARY BUTTON (charte page 3 — large & arrondi)
+══════════════════════════════════════════ */
+.btn-primary{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(135deg,var(--orange) 0%,var(--orange-light) 100%);
+  color:#FFFFFF;
+  font-family:'Nunito',sans-serif;
+  font-size:15px;font-weight:800;
+  padding:14px 32px;
+  width:100%;
+  border:none;border-radius:16px;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  box-shadow:0 4px 14px rgba(210,122,45,0.35);
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(210,122,45,0.5);
+}
+.btn-primary:active{transform:scale(0.97)}
+
+.save-row{margin-top:20px}
+
+/* ══════════════════════════════════════════
+   PAYMENT CARD
+══════════════════════════════════════════ */
+.credit-card{
+  background:linear-gradient(135deg,var(--navy) 0%,#1e3d58 60%,#2a5275 100%);
+  border-radius:16px;padding:22px 20px;color:#fff;
+  margin-bottom:14px;position:relative;overflow:hidden;
+}
+.credit-card::before{
+  content:'';position:absolute;
+  top:-40px;right:-40px;
+  width:140px;height:140px;border-radius:50%;
+  background:rgba(210,122,45,0.15);
+}
+.credit-card::after{
+  content:'';position:absolute;
+  bottom:-50px;right:10px;
+  width:110px;height:110px;border-radius:50%;
+  background:rgba(255,255,255,0.05);
+}
+.card-brand{
+  font-size:22px;font-weight:900;
+  letter-spacing:2px;font-style:italic;
+  color:var(--orange-light);
+}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start}
+.card-dots button{
+  background:none;border:none;cursor:pointer;
+  color:rgba(255,255,255,0.6);font-size:18px;
+}
+.card-number{
+  font-size:15px;font-weight:700;letter-spacing:2px;
+  margin:14px 0 16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.copy-btn{
+  background:rgba(210,122,45,0.25);border:1px solid rgba(210,122,45,0.4);
+  border-radius:6px;padding:4px 10px;cursor:pointer;
+  color:var(--orange-light);font-size:11px;font-weight:800;
+  font-family:'Nunito',sans-serif;
+  transition:all 0.2s;
+}
+.copy-btn:hover{background:rgba(210,122,45,0.4)}
+.card-footer{display:flex;justify-content:space-between}
+.card-meta label{
+  font-size:9px;font-weight:800;letter-spacing:1px;
+  opacity:0.6;text-transform:uppercase;display:block;margin-bottom:3px;
+}
+.card-meta span{font-size:13px;font-weight:700}
+
+.add-card-btn{
+  display:flex;align-items:center;gap:10px;
+  background:var(--orange-bg);
+  border:2px dashed rgba(210,122,45,0.35);
+  border-radius:var(--radius-sm);padding:12px 16px;
+  width:100%;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+  font-size:14px;font-weight:700;color:var(--orange);
+  transition:all 0.2s;
+}
+.add-card-btn:hover{
+  border-color:var(--orange);
+  background:#fff4ea;
+}
+.add-card-btn svg{width:18px;height:18px;fill:var(--orange)}
+
+/* ══════════════════════════════════════════
+   SUBSCRIPTION PLANS
+══════════════════════════════════════════ */
+.sub-title{
+  font-size:15px;font-weight:800;color:var(--navy);
+  margin-bottom:18px;text-transform:uppercase;letter-spacing:0.5px;
+  display:flex;align-items:center;gap:8px;
+}
+.sub-title svg{width:18px;height:18px;fill:var(--orange)}
+
+.sub-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.plan-card{
+  border-radius:16px;padding:24px 20px;position:relative;
+  border:2px solid var(--border);background:#fff;
+  transition:transform .2s,box-shadow .2s;
+}
+.plan-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(23,46,66,0.1);
+}
+.plan-card.active{
+  background:linear-gradient(160deg,var(--navy) 0%,#1e3d58 100%);
+  border-color:var(--navy);color:#fff;
+}
+
+.plan-badge{
+  display:inline-block;
+  background:linear-gradient(135deg,var(--orange) 0%,var(--orange-light) 100%);
+  color:#fff;font-size:10px;font-weight:800;
+  padding:4px 12px;border-radius:20px;margin-bottom:12px;
+  text-transform:uppercase;letter-spacing:0.5px;
+}
+.plan-name{font-size:20px;font-weight:900;color:var(--navy);margin-bottom:4px}
+.plan-card.active .plan-name{color:#fff}
+
+.plan-price{
+  font-size:30px;font-weight:900;color:var(--navy);
+  line-height:1;display:flex;align-items:baseline;gap:4px;
+}
+.plan-card.active .plan-price{color:#fff}
+.plan-price-currency{font-size:16px;font-weight:700}
+.plan-period{
+  font-size:12px;color:var(--muted);font-weight:600;
+  margin:4px 0;
+}
+.plan-card.active .plan-period{color:rgba(255,255,255,0.55)}
+.plan-desc{
+  font-size:12px;color:var(--muted);font-weight:600;
+  margin:8px 0 16px;line-height:1.5;
+}
+.plan-card.active .plan-desc{color:rgba(255,255,255,0.55)}
+.plan-billing{
+  font-size:12px;color:rgba(255,255,255,0.5);font-weight:600;
+  margin-bottom:16px;
+}
+
+/* Plan CTAs — suivre la taille bouton page 3 */
+.plan-cta{
+  width:100%;
+  padding:13px;
+  border-radius:14px;
+  font-family:'Nunito',sans-serif;
+  font-size:13px;font-weight:800;
+  cursor:pointer;border:none;
+  transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  text-transform:uppercase;letter-spacing:0.5px;
+}
+.plan-cta.current{
+  background:transparent;
+  border:2px solid rgba(255,255,255,0.3);
+  color:rgba(255,255,255,0.85);
+}
+.plan-cta.current:hover{background:rgba(255,255,255,0.1)}
+.plan-cta.current svg{width:14px;height:14px;fill:currentColor}
+
+.plan-cta.choose{
+  background:linear-gradient(135deg,var(--orange) 0%,var(--orange-light) 100%);
+  color:#fff;
+  box-shadow:0 4px 14px rgba(210,122,45,0.3);
+}
+.plan-cta.choose:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 20px rgba(210,122,45,0.45);
+}
+
+.cancel-link{
+  display:block;text-align:center;
+  font-size:12px;font-weight:700;
+  color:rgba(255,255,255,0.4);
+  margin-top:10px;cursor:pointer;
+  text-decoration:underline;
+  transition:color 0.2s;
+}
+.cancel-link:hover{color:rgba(255,255,255,0.7)}
+
+.save-pct{
+  font-size:11px;font-weight:800;
+  color:var(--orange);
+  background:rgba(210,122,45,0.12);
+  padding:3px 8px;border-radius:8px;
+  margin-left:6px;
+}
+.plan-card.active .save-pct{
+  background:rgba(210,122,45,0.25);
+}
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+.toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(60px);
+  background:var(--navy);color:#fff;
+  padding:13px 24px;border-radius:28px;
+  font-family:'Nunito',sans-serif;
+  font-size:14px;font-weight:700;
+  box-shadow:0 6px 24px rgba(23,46,66,0.25);
+  z-index:999;opacity:0;
+  transition:all .35s cubic-bezier(.34,1.2,.64,1);
+  display:flex;align-items:center;gap:10px;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast svg{width:16px;height:16px;fill:var(--orange-light)}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media(max-width:1100px){
+  .top-grid{grid-template-columns:1fr 1fr}
+  .sub-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:720px){
+  .top-grid{grid-template-columns:1fr}
+  .sub-grid{grid-template-columns:1fr}
+  .sb-main-content{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="sb-main-content">
+
+  <!-- Page header (remplace la topbar) -->
+  <div class="page-header">
+    <h1>Mon profil</h1>
+  </div>
+
+  <div class="top-grid">
+
+    <!-- ── Gauche : Détails du compte ── -->
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+        Détails du compte
+      </div>
+
+      <div class="avatar-row">
+        <div class="avatar-circle">S</div>
+        <div class="avatar-info">
+          <div class="name">Sally Mindset</div>
+          <div class="email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7a091b1616031713141e3a1d171b131654191517">[email&#160;protected]</a></div>
+          <button class="upload-btn" onclick="showToast('📷 Sélectionnez une image…')">Changer la photo</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Tranche d'âge</label>
+        <div class="input-wrap">
+          <select>
+            <option>18 – 24 ans</option>
+            <option>25 – 34 ans</option>
+            <option selected>35 – 44 ans</option>
+            <option>45 – 54 ans</option>
+            <option>55 ans et plus</option>
+          </select>
+          <span class="select-arrow"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Statut professionnel</label>
+        <div class="input-wrap">
+          <select>
+            <option>Salarié</option>
+            <option selected>Indépendant / Freelance</option>
+            <option>Chef d'entreprise</option>
+            <option>Étudiant</option>
+            <option>En reconversion</option>
+          </select>
+          <span class="select-arrow"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Secteur d'activité</label>
+        <div class="input-wrap">
+          <select>
+            <option>Immobilier</option>
+            <option selected>Finance & Banque</option>
+            <option>Droit & Juridique</option>
+            <option>Commerce & Distribution</option>
+            <option>Technologie</option>
+            <option>Autre</option>
+          </select>
+          <span class="select-arrow"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Métier</label>
+        <div class="input-wrap">
+          <input type="text" value="Conseiller en gestion" placeholder="Votre métier" />
+          <span class="input-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="save-row">
+        <button class="btn-primary" onclick="showToast('✅ Profil enregistré !')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Enregistrer
+        </button>
+      </div>
+    </div>
+
+
+    <!-- ── Droite : Moyen de paiement ── -->
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+        Moyen de paiement
+      </div>
+
+      <div class="credit-card">
+        <div class="card-top">
+          <div class="card-brand">VISA</div>
+          <div class="card-dots"><button>···</button></div>
+        </div>
+        <div class="card-number">
+          <span>4441 **** **** 4288</span>
+          <button class="copy-btn" onclick="showToast('📋 Numéro copié !')">copier</button>
+        </div>
+        <div class="card-footer">
+          <div class="card-meta">
+            <label>EXPIRE</label>
+            <span>03/28</span>
+          </div>
+          <div class="card-meta" style="text-align:right">
+            <label>TITULAIRE</label>
+            <span>Sally Mindset</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="add-card-btn" onclick="showToast('💳 Ajoutez une nouvelle carte…')">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+        Ajouter une nouvelle carte
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ── Bas : Abonnement ── -->
+  <div class="card bottom-section">
+    <div class="sub-title">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Abonnement
+    </div>
+    <div class="sub-grid">
+
+      <!-- Apprenti -->
+      <div class="plan-card">
+        <div class="plan-name">Apprenti</div>
+        <div class="plan-price">
+          <span class="plan-price-currency">€</span>12,00
+        </div>
+        <div class="plan-period">par mois &nbsp;·&nbsp; <span style="color:#9CA3AF">115 €/an</span></div>
+        <div class="plan-desc">Idéal pour commencer votre apprentissage à votre rythme.</div>
+        <button class="plan-cta choose" onclick="showToast('📦 Offre Apprenti sélectionnée')">Choisir cette offre</button>
+      </div>
+
+      <!-- Compagnon (actuel) -->
+      <div class="plan-card active">
+        <div class="plan-badge">⭐ Actuel</div>
+        <div class="plan-name">Compagnon</div>
+        <div class="plan-price">
+          <span class="plan-price-currency">€</span>24,00
+        </div>
+        <div class="plan-period">par mois &nbsp;·&nbsp; <span style="opacity:0.5">230 €/an</span></div>
+        <div class="plan-desc">Accès complet aux thématiques et au classement mensuel.</div>
+        <div class="plan-billing">Prochain prélèvement : 31 janvier 2025</div>
+        <button class="plan-cta current">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Abonnement actuel
+        </button>
+        <span class="cancel-link" onclick="showToast('⚠️ Annulation en cours…')">Résilier l'abonnement</span>
+      </div>
+
+      <!-- Réussite -->
+      <div class="plan-card">
+        <div style="display:flex;align-items:center;gap:0">
+          <div class="plan-name">Réussite</div>
+          <span class="save-pct">-20%</span>
+        </div>
+        <div class="plan-price">
+          <span class="plan-price-currency">€</span>38,00
+        </div>
+        <div class="plan-period">par mois &nbsp;·&nbsp; <span style="color:#9CA3AF">365 €/an</span></div>
+        <div class="plan-desc">Accompagnement premium avec coaching et contenus exclusifs.</div>
+        <button class="plan-cta choose" onclick="showToast('🚀 Offre Réussite sélectionnée')">Choisir cette offre</button>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /.sb-main-content -->
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+  <span id="toastMsg">Action effectuée</span>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ── Sidebar JS (inline) ── */
+(function () {
+    'use strict';
+    const HTML = `
+        <aside class="sidebar">
+            <div class="sb-header">
+                <a class="sb-brand" href="index.html">5secondes<span>chrono</span></a>
+                <button class="sb-collapse-btn" aria-label="Réduire/agrandir">
+                    <svg viewBox="0 0 24 24" fill="white">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+            </div>
+            <nav class="sb-nav">
+                <a class="sb-item" href="index.html" data-tooltip="Accueil">
+                    <div class="sb-icon" style="background:rgba(195,209,185,0.2)">
+                        <svg viewBox="0 0 24 24" fill="#fff"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                    </div>
+                    <span class="sb-label">Accueil</span>
+                </a>
+                <a class="sb-item" href="01-intro.html" data-tooltip="Quiz">
+                    <div class="sb-icon" style="background:rgba(88,204,2,0.15)">
+                        <svg viewBox="0 0 24 24" fill="#58cc02"><path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/></svg>
+                    </div>
+                    <span class="sb-label">Quiz</span>
+                </a>
+                <a class="sb-item" href="progression.html" data-tooltip="Progression">
+                    <div class="sb-icon" style="background:rgba(210,122,45,0.2)">
+                        <svg viewBox="0 0 24 24" fill="#D27A2D"><path d="M13 2.05V4.06c3.95.49 7 3.85 7 7.94 0 3.21-1.81 6-4.72 7.28L13 17v5l6-3.19C21.91 16.26 24 12.79 24 12c0-5.18-3.95-9.45-9.02-10.42zM11 2.06C5.95 3.03 2 7.3 2 12.01c0 3.79 2.09 7.26 5 9.04L11 17V2.06z"/></svg>
+                    </div>
+                    <span class="sb-label">Progression</span>
+                </a>
+                <a class="sb-item active" href="profil.html" data-tooltip="Mon Profil">
+                    <div class="sb-icon" style="background:rgba(206,130,255,0.15)">
+                        <svg viewBox="0 0 24 24" fill="#ce82ff"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                    </div>
+                    <span class="sb-label">Mon Profil</span>
+                </a>
+            </nav>
+        </aside>`;
+
+    const tmp = document.createElement('div');
+    tmp.innerHTML = HTML;
+    while (tmp.firstChild) document.body.insertBefore(tmp.firstChild, document.body.firstChild);
+
+    const btn  = document.querySelector('.sb-collapse-btn');
+    const body = document.body;
+
+    function zone() {
+        const w = window.innerWidth;
+        if (w < 768)  return 'mobile';
+        if (w < 1200) return 'tablet';
+        return 'desktop';
+    }
+
+    function applyZone(z) {
+        body.classList.remove('sb-closed', 'sb-open');
+        btn.classList.remove('sb-rotated');
+        if (z === 'mobile') return;
+        if (z === 'tablet') {
+            const saved = localStorage.getItem('sb_tablet');
+            if (saved === 'open') { body.classList.add('sb-open'); }
+            else { body.classList.add('sb-closed'); btn.classList.add('sb-rotated'); }
+            return;
+        }
+        if (z === 'desktop') {
+            const saved = localStorage.getItem('sb_desktop');
+            if (saved === 'closed') { body.classList.add('sb-closed'); btn.classList.add('sb-rotated'); }
+        }
+    }
+
+    btn?.addEventListener('click', () => {
+        const z = zone();
+        if (z === 'mobile') return;
+        if (z === 'tablet') {
+            if (body.classList.contains('sb-closed')) {
+                body.classList.remove('sb-closed'); body.classList.add('sb-open');
+                btn.classList.remove('sb-rotated'); localStorage.setItem('sb_tablet', 'open');
+            } else {
+                body.classList.remove('sb-open'); body.classList.add('sb-closed');
+                btn.classList.add('sb-rotated'); localStorage.setItem('sb_tablet', 'closed');
+            }
+            return;
+        }
+        if (z === 'desktop') {
+            if (body.classList.contains('sb-closed')) {
+                body.classList.remove('sb-closed'); btn.classList.remove('sb-rotated');
+                localStorage.setItem('sb_desktop', 'open');
+            } else {
+                body.classList.add('sb-closed'); btn.classList.add('sb-rotated');
+                localStorage.setItem('sb_desktop', 'closed');
+            }
+        }
+    });
+
+    let t;
+    window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => applyZone(zone()), 80); });
+    applyZone(zone());
+})();
+</script>
